@@ -17,7 +17,5 @@
             
             WRITE(*,*) pi
             
-            CALL SYSTEM('mkdir RESULT') 
-            
         END PROGRAM Projection_main
 
