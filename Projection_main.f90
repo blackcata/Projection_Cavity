@@ -11,9 +11,11 @@
 
             IMPLICIT NONE
             INTEGER :: it, i, j, k
-            REAL(KIND=8),PARAMETER :: pi
+            REAL(KIND=8) :: pi
             
             pi = atan(1.0) * 4
-
+            
+            WRITE(*,*) pi
+            
         END PROGRAM Projection_main
 
