@@ -4,6 +4,8 @@
 !
 !  PURPOSE: To solve the cavity problem, projection method was used to 
 !           solve the Navier-Stokes equation. 
+!    
+!                                                            2016.02.24 K.Noh
 !
 !----------------------------------------------------------------------------
     
