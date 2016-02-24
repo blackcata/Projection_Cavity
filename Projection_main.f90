@@ -9,7 +9,7 @@
     
         PROGRAM Projection_main
 
-            USE, projection_modue                                           &
+            USE projection_module,                                           &
                 ONLY : file_name, path_name 
             
             IMPLICIT NONE
