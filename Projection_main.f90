@@ -9,6 +9,9 @@
     
         PROGRAM Projection_main
 
+            USE, projection_modue                                           &
+                ONLY : file_name, path_name 
+            
             IMPLICIT NONE
             INTEGER :: it, i, j, k
             REAL(KIND=8) :: pi
