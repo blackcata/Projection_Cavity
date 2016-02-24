@@ -20,7 +20,12 @@
             
             pi = atan(1.0) * 4
             
-            WRITE(*,*) pi
+            path_name = 'RESULT' 
+            CALL SYSTEM('mkdir '//TRIM(path_name))
+            
+            OPEN(100,FILE=TRIM(path_name)//'/Test.plt',FORM='FORMATTED',STATUS='REPLACE')
+            WRITE(100,*) 'Test'
+            CLOSE(100) 
             
         END PROGRAM Projection_main
 
