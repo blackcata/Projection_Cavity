@@ -12,7 +12,10 @@
         PROGRAM Projection_main
 
             USE projection_module,                                           &
-                ONLY : file_name, path_name 
+                ONLY : file_name, path_name
+            
+            USE projection_module,                                           &
+                ONLY : Nx, Ny, dx, dy, Lx, Ly
             
             IMPLICIT NONE
             INTEGER :: it, i, j, k
@@ -26,6 +29,18 @@
             OPEN(100,FILE=TRIM(path_name)//'/Test.plt',FORM='FORMATTED',STATUS='REPLACE')
             WRITE(100,*) 'Test'
             CLOSE(100) 
+            
+            Nx = 100
+            Ny = 100
+            
+            Lx = 1.0
+            Ly = 1.0
+            
+            dx = Lx / (Nx+1)
+            dy = Ly / (Ny+1)
+            
+            WRITE(*,*) Nx, dx, Lx
+            WRITE(*,*) Ny, dy, Ly
             
         END PROGRAM Projection_main
 

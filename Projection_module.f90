@@ -10,7 +10,8 @@
 !----------------------------------------------------------------------------
         MODULE projection_module
             
-            REAL(KIND=8) :: Re, Dx, Dy, Lx, Ly
+            INTEGER :: Nx, Ny 
+            REAL(KIND=8) :: Re, dx, dy, Lx, Ly
             CHARACTER(LEN=65) :: file_name, path_name
             
             SAVE
