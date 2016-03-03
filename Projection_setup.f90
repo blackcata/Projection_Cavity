@@ -4,6 +4,8 @@
 !
 !  PURPOSE: Setup the cavity problem for Projection method
 !
+!                                                            2016.02.28 K.Noh
+!                                                   
 !   log 
 !   2016.03.01 First add the setup file and initialization of the U,V,P
 !
