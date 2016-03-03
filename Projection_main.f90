@@ -19,7 +19,8 @@
                 ONLY : U, V, P
 
             IMPLICIT NONE
-            INTEGER :: it, i, j, k
+            
+            INTEGER :: it, i, j
             
             path_name = 'RESULT' 
             CALL SYSTEM('mkdir '//TRIM(path_name))

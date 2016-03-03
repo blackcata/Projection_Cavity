@@ -7,15 +7,16 @@
 !                                                   
 !   log 
 !   2016.03.01 First add the setup file and initialization of the U,V,P
+!   2016.03.03 Setup the omega and tollerance value and allocate phi 
 !
 !-----------------------------------------------------------------------------------!
         SUBROUTINE SETUP()
             
             USE projection_module,                                              &
-                ONLY : Nx, Ny, dx, dy, Lx, Ly
+                ONLY : Nx, Ny, dx, dy, Lx, Ly, omega, tol
             
             USE projection_module,                                              &
-                ONLY : U0, U, V, P 
+                ONLY : U0, U, V, P, Phi
             
             IMPLICIT NONE
 
@@ -30,11 +31,15 @@
             dx = Lx / Nx
             dy = Ly / Ny
             
-            ALLOCATE( U(0:Nx,0:Ny), V(0:Nx,0:Ny), P(0:Nx,0:Ny) )
+            omega = 1.8
+            tol = 1e-4
+            
+            ALLOCATE( U(0:Nx,0:Ny), V(0:Nx,0:Ny), P(0:Nx,0:Ny), Phi(0:Nx,0:Ny,0:1) )
             
             U = 0.0
             V = 0.0
             P = 0.0
+            Phi = 0.0
             
             U(:,Ny) = U0 
             
