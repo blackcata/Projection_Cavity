@@ -13,7 +13,7 @@
         SUBROUTINE SETUP()
             
             USE projection_module,                                              &
-                ONLY : Nx, Ny, dx, dy, Lx, Ly, omega, tol
+                ONLY : Nx, Ny, dx, dy, Lx, Ly, omega, tol, Re
             
             USE projection_module,                                              &
                 ONLY : U0, U, V, P, Phi
@@ -21,6 +21,7 @@
             IMPLICIT NONE
 
             U0 = 1.0
+            Re = 100
             
             Nx = 10
             Ny = 10

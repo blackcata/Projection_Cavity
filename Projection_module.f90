@@ -19,8 +19,8 @@
             REAL(KIND=8) :: U0, tol, omega
             CHARACTER(LEN=65) :: file_name, path_name
  
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: U,V
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: P
+            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: U,V, Uhat, Vhat, UNew, VNew
+            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: P,VOR,Stream
             REAL(KIND=8), DIMENSION(:,:,:), ALLOCATABLE :: Phi
 
             SAVE
