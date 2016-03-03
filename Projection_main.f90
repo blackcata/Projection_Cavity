@@ -1,23 +1,21 @@
-!----------------------------------------------------------------------------
-!
+!-----------------------------------------------------------------------------------!
 !  PROGRAM: Projection_main.f90
 !
 !  PURPOSE: To solve the cavity problem, projection method was used to 
 !           solve the Navier-Stokes equation with Staggered grid. 
 !    
-!                                                            2016.02.24 K.Noh
+!                                                                2016.03.02 K.Noh
 !
-!----------------------------------------------------------------------------
-    
+!-----------------------------------------------------------------------------------!
         PROGRAM Projection_main
 
-            USE projection_module,                                           &
+            USE projection_module,                                                &
                 ONLY : file_name, path_name
             
-            USE projection_module,                                           &
+            USE projection_module,                                                &
                 ONLY : Nx, Ny, dx, dy, Lx, Ly
             
-            USE projection_module,                                           &
+            USE projection_module,                                                &
                 ONLY : U, V, P
 
             IMPLICIT NONE

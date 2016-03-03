@@ -1,19 +1,19 @@
-!----------------------------------------------------------------------------
+!-----------------------------------------------------------------------------------!
 !
 !  PROGRAM: TDMA_Solver.f90
 !
 !  PURPOSE: To solve the inverse problem at Tridiagonal matrix.
 !           This is called the TDMA Solver.
 !
-!                                                            2016.03.02 K.Noh
+!                                                                2016.03.02 K.Noh
 !
 !   log 
 !   2016.03.03 First make a TDMA Solver and add some precautions
-!       This subroutine has a point to be careful that  after subroutine 
-!       a,b,c,d values are changed dramatically so if you use more than   
-!       once this subrouitne you have to reset a,b,c,d valueevery time  
+!              This subroutine has a point to be careful that  after subroutine 
+!              a,b,c,d values are changed dramatically so if you use more than once
+!              this subroutine you have to reset a,b,c,d value every time
 !                                     
-!----------------------------------------------------------------------------
+!-----------------------------------------------------------------------------------!
 
         SUBROUTINE TDMA_Solver(a,b,c,r,x,n)
 
@@ -23,7 +23,7 @@
 
             a(0) = 0.0
             c(n) = 0.0
-
+    
             !---Forward Sweeping-----
 
             DO it = 1,n

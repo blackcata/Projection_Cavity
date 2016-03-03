@@ -1,16 +1,16 @@
-!----------------------------------------------------------------------------
-!
+!-----------------------------------------------------------------------------------!
 !  PROGRAM: Projection_main.f90
 !
 !  PURPOSE: Modules for Projection method
 !
-!                                                            2016.02.26 K.Noh
+!                                                                2016.03.02 K.Noh
 !
 !   log 
 !   2016.02.24 First make a module file and add file_name, path_name 
 !   2016.03.02 Add the velocity and pressure arrays and initial velocity U0
 !
-!----------------------------------------------------------------------------
+!-----------------------------------------------------------------------------------!
+
         MODULE projection_module
             
             INTEGER :: Nx, Ny 

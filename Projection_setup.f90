@@ -1,22 +1,20 @@
-!----------------------------------------------------------------------------
-!
+!-----------------------------------------------------------------------------------!
 !  PROGRAM: Projection_setup.f90
 !
 !  PURPOSE: Setup the cavity problem for Projection method
 !
-!                                                            2016.02.28 K.Noh
+!                                                                2016.03.02 K.Noh
 !                                                   
 !   log 
 !   2016.03.01 First add the setup file and initialization of the U,V,P
 !
-!----------------------------------------------------------------------------
-
+!-----------------------------------------------------------------------------------!
         SUBROUTINE SETUP()
             
-            USE projection_module,                                           &
+            USE projection_module,                                              &
                 ONLY : Nx, Ny, dx, dy, Lx, Ly
             
-            USE projection_module,                                           &
+            USE projection_module,                                              &
                 ONLY : U0, U, V, P 
             
             IMPLICIT NONE
