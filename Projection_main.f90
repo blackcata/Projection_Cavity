@@ -16,7 +16,7 @@
                 ONLY : Nx, Ny, dx, dy, Lx, Ly
             
             USE projection_module,                                                &
-                ONLY : U, V, P, Phi, Divergence
+                ONLY : U, V, P, Phi, Divergence, Vhat, Gradient_phi_y
 
             IMPLICIT NONE
             
@@ -28,15 +28,16 @@
             
             CALL SOR
             CALL Divergence(P)
+            CALL Gradient_phi_y(Vhat)
             
             OPEN(100,FILE=TRIM(path_name)//'/P.plt',FORM='FORMATTED',STATUS='REPLACE')
-            Write(100,*) 'VARIABLES = "x","y","P"'
-            Write(100,200) NX,Ny
+            Write(100,*) 'VARIABLES = "x","y","dv","phi"'
+            Write(100,200) NX,Ny-1
 200         Format('Zone',2X,'I=',I3,2X,'J=',I3,2X,'F=Point')
             
-            DO j = 1,Ny
+            DO j = 1,Ny-1
                 DO i = 1,Nx
-                    WRITE(100,*) i*dx, j*dy, P(i,j)
+                    WRITE(100,*) i*dx, j*dy, vhat(i,j), phi(i,j,1)
                 END DO
             END DO 
             CLOSE(100) 

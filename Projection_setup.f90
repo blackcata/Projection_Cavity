@@ -8,6 +8,7 @@
 !   log 
 !   2016.03.01 First add the setup file and initialization of the U,V,P
 !   2016.03.03 Setup the omega and tollerance value and allocate phi 
+!   2016.03.04 Add Unew, Vnea, Uhat, Vhat arrays and initialized    
 !
 !-----------------------------------------------------------------------------------!
         SUBROUTINE SETUP
@@ -16,15 +17,15 @@
                 ONLY : Nx, Ny, dx, dy, Lx, Ly, omega, tol, Re
             
             USE projection_module,                                              &
-                ONLY : U0, U, V, P, Phi
+                ONLY : U0, U, V, Uhat, Vhat, Unew, Vnew, P, Phi
             
             IMPLICIT NONE
 
             U0 = 1.0
             Re = 100
             
-            Nx = 10
-            Ny = 10
+            Nx = 50
+            Ny = 50
             
             Lx = 1.0
             Ly = 1.0
@@ -36,13 +37,21 @@
             tol = 1e-4
             
             ALLOCATE( U(0:Nx,0:Ny+1), V(0:Nx+1,0:Ny), P(1:Nx,1:Ny), Phi(1:Nx,1:Ny,0:1) )
+            ALLOCATE( Unew(0:Nx,0:Ny+1), Vnew(0:Nx+1,0:Ny) )
+            ALLOCATE( Uhat(1:Nx-1,1:Ny), Vhat(1:Nx,1:Ny-1) )
             
             U = 0.0
             V = 0.0
             P = 0.0
             Phi = 0.0
             
-            U(:,NY-1:Ny) = U0 
+            Unew = 0.0
+            Vnew = 0.0
+            Uhat = 0.0
+            Vhat = 0.0
+            
+            U(:,NY-1:Ny) = U0
+            Phi(20:30,1,:) = U0
             
         END SUBROUTINE SETUP
     
