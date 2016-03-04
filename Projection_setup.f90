@@ -23,8 +23,8 @@
             U0 = 1.0
             Re = 100
             
-            Nx = 100
-            Ny = 100
+            Nx = 10
+            Ny = 10
             
             Lx = 1.0
             Ly = 1.0
@@ -32,7 +32,7 @@
             dx = Lx / Nx
             dy = Ly / Ny
             
-            omega = 1.1
+            omega = 1.85
             tol = 1e-4
             
             ALLOCATE( U(0:Nx,0:Ny+1), V(0:Nx+1,0:Ny), P(1:Nx,1:Ny), Phi(1:Nx,1:Ny,0:1) )
@@ -42,8 +42,7 @@
             P = 0.0
             Phi = 0.0
             
-            U(:,Ny) = U0 
-            Phi(45:55,1,:) = U0
+            U(:,NY-1:Ny) = U0 
             
         END SUBROUTINE SETUP
     
