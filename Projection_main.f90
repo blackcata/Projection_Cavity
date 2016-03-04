@@ -24,12 +24,18 @@
             
             path_name = 'RESULT' 
             CALL SYSTEM('mkdir '//TRIM(path_name))
-            
-            OPEN(100,FILE=TRIM(path_name)//'/Test.plt',FORM='FORMATTED',STATUS='REPLACE')
-            WRITE(100,*) 'Test'
-            CLOSE(100) 
-            
             CALL SETUP()
+            
+            OPEN(100,FILE=TRIM(path_name)//'/U.plt',FORM='FORMATTED',STATUS='REPLACE')
+            Write(100,*) 'VARIABLES = "x","y","u"'
+            Write(100,200) NX,Ny
+            200 Format('Zone',2X,'I=',I3,2X,'J=',I3,2X,'F=Point')
+            DO j = 1,Ny
+                DO i = 1,Nx
+                    WRITE(100,*) i*dx, j*dy, U(i,j)
+                END DO
+            END DO 
+            CLOSE(100) 
 
             WRITE(*,*) Nx, dx, Lx
             WRITE(*,*) Ny, dy, Ly

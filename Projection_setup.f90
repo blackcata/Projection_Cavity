@@ -35,7 +35,7 @@
             omega = 1.8
             tol = 1e-4
             
-            ALLOCATE( U(0:Nx,0:Ny), V(0:Nx,0:Ny), P(0:Nx,0:Ny), Phi(0:Nx,0:Ny,0:1) )
+            ALLOCATE( U(0:Nx,0:Ny+1), V(0:Nx+1,0:Ny), P(1:Nx,1:Ny), Phi(1:Nx,1:Ny,0:1) )
             
             U = 0.0
             V = 0.0
