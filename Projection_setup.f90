@@ -51,7 +51,6 @@
             Vhat = 0.0
             
             U(:,NY-1:Ny) = U0
-            Phi(20:30,1,:) = U0
             
         END SUBROUTINE SETUP
     
