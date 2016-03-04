@@ -1,4 +1,5 @@
 !-----------------------------------------------------------------------------------!
+!
 !  PROGRAM: Projection_main.f90
 !
 !  PURPOSE: Modules for Projection method
@@ -21,7 +22,7 @@
             CHARACTER(LEN=65) :: file_name, path_name
  
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: U,V, Uhat, Vhat, UNew, VNew
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: P,VOR,Stream
+            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: P,VOR,Stream, hx, hy
             REAL(KIND=8), DIMENSION(:,:,:), ALLOCATABLE :: Phi
             
             SAVE
