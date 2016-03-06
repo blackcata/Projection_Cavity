@@ -5,7 +5,7 @@
 !  PURPOSE: To solve the inverse problem at Tridiagonal matrix.
 !           This is called the TDMA Solver.
 !
-!                                                                2016.03.02 K.Noh
+!                                                                2016.03.03 K.Noh
 !
 !   log 
 !   2016.03.03 First make a TDMA Solver and add some precautions

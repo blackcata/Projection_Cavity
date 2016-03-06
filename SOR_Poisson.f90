@@ -4,7 +4,7 @@
 !
 !  PURPOSE: To solve the poisson equation by SOR Method 
 !
-!                                                                2016.03.02 K.Noh
+!                                                                2016.03.04 K.Noh
 !
 !   log 
 !   2016.03.04 Add SOR Solver of poisson equation and modified to optimize to 

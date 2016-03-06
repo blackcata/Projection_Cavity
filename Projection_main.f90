@@ -5,7 +5,7 @@
 !  PURPOSE: To solve the cavity problem, projection method was used to 
 !           solve the Navier-Stokes equation with Staggered grid. 
 !    
-!                                                                2016.03.02 K.Noh
+!                                                                2016.02.24 K.Noh
 !
 !-----------------------------------------------------------------------------------!
     
@@ -22,6 +22,7 @@
             path_name = 'RESULT' 
             CALL SYSTEM('mkdir '//TRIM(path_name))
             CALL SETUP
+            CALL RESI
 
             OPEN(100,FILE=TRIM(path_name)//'/TEST.plt',FORM='FORMATTED',STATUS='REPLACE')
             CLOSE(100) 

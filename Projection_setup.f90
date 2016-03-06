@@ -4,7 +4,7 @@
 !
 !  PURPOSE: Setup the cavity problem for Projection method
 !
-!                                                                2016.03.02 K.Noh
+!                                                                2016.03.01 K.Noh
 !                                                   
 !   log 
 !   2016.03.01 First add the setup file and initialization of the U,V,P
@@ -17,11 +17,11 @@
         SUBROUTINE SETUP
             
             USE projection_module,                                              &
-                ONLY : Nx, Ny, dx, dy, Lx, Ly, omega, tol, Re, U0, dt
+                ONLY : Nx, Ny, dx, dy, ALx, ALy, omega, tol, Re, U0, dt
             
             USE projection_module,                                              &
                 ONLY : U, V, Uhat, Vhat, Unew, Vnew, P, Phi,                    &
-                       Hx, Hy, Rx, Ry
+                       Hx, Hy, Rx, Ry, Lx, Ly
             
             IMPLICIT NONE
 
@@ -32,11 +32,11 @@
             Nx = 50
             Ny = 50
             
-            Lx = 1.0
-            Ly = 1.0
+            ALx = 1.0
+            ALy = 1.0
             
-            dx = Lx / Nx
-            dy = Ly / Ny
+            dx = ALx / Nx
+            dy = ALy / Ny
             
             omega = 1.85
             tol = 1e-4
@@ -44,6 +44,7 @@
             ALLOCATE( U(0:Nx,0:Ny+1), V(0:Nx+1,0:Ny), P(1:Nx,1:Ny) )
             ALLOCATE( Uhat(1:Nx-1,1:Ny), Vhat(1:Nx,1:Ny-1) )
             ALLOCATE( Hx(1:Nx-1,1:Ny), Hy(1:Nx,1:Ny-1) )
+            ALLOCATE( Lx(1:Nx-1,1:Ny), Ly(1:Nx,1:Ny-1) )
             ALLOCATE( Rx(1:Nx-1,1:Ny), Ry(1:Nx,1:Ny-1) )
             ALLOCATE( Unew(0:Nx,0:Ny+1), Vnew(0:Nx+1,0:Ny), Phi(1:Nx,1:Ny,0:1) )
             
@@ -59,9 +60,11 @@
             
             Hx = 0.0
             Hy = 0.0
+            Lx = 0.0
+            Ly = 0.0
             Rx = 0.0
             Ry = 0.0
-            
+             
             U(:,NY-1:Ny) = U0
             
         END SUBROUTINE SETUP

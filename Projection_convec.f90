@@ -4,7 +4,7 @@
 !
 !  PURPOSE: Calculating the convective term which is nonlinear term.
 !
-!                                                                2016.03.02 K.Noh
+!                                                                2016.03.04 K.Noh
 !                                                   
 !   log 
 !   2016.03.04 Add calculating convetive term code
