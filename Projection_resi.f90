@@ -7,17 +7,17 @@
 !                                                                2016.03.06 K.Noh
 !                                                   
 !   log 
-!   2016.03.04 Add residual code 
+!   2016.03.06 Add residual code and it is programmed.
 !
 !-----------------------------------------------------------------------------------!
     
         SUBROUTINE RESI
             
             USE projection_module,                                              &
-                ONLY : Nx, Ny, dx, dy, dt
+                ONLY : Nx, Ny, Re, dt
             
             USE projection_module,                                              &
-                ONLY : Hx, Hy, Rx, Ry
+                ONLY : Hx, Hy, Lx, Ly, Rx, Ry
             
             IMPLICIT NONE
             
@@ -28,10 +28,10 @@
             Hy_pr = Hy
 
             CALL CONVEC
-            !CALL LAPLACE
+            CALL LAPLACE
 
-            Rx = dt/2 * ( 3*Hx - Hx_pr) 
-            Ry = dt/2 * ( 3*Hy - Hy_Pr) 
+            Rx = dt/2 * ( 3*Hx - Hx_pr) + dt/Re * Lx
+            Ry = dt/2 * ( 3*Hy - Hy_Pr) + dt/Re * Ly
 
         END SUBROUTINE RESI
     

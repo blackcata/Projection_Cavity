@@ -1,8 +1,8 @@
 F90=gfortran
 TARGET= Projection_Cavity
 OBJECT= Projection_module.o Projection_main.o Projection_setup.o \
-		Projection_getdu.o Projection_getdv.o Projection_convec.o \
-		Projection_resi.o \
+		Projection_getdu.o Projection_getdv.o \
+		Projection_resi.o Projection_convec.o Projection_laplace.o  \
 		SOR_Poisson.o TDMA_Solver.o 
 
 all : $(TARGET)
