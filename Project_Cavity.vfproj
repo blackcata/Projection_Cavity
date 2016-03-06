@@ -28,5 +28,11 @@
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<File RelativePath=".\Projection_main.f90"/>
-		<File RelativePath=".\Projection_module.f90"/></Filter></Files>
+		<File RelativePath=".\Projection_module.f90"/>
+		<File RelativePath=".\Projection_setup.f90"/>
+		<File RelativePath=".\SOR_Poisson.f90"/>
+		<File RelativePath=".\Projection_getdu.f90"/>
+		<File RelativePath=".\Projection_getdv.f90"/>
+		<File RelativePath=".\Projection_convec.f90"/>
+		<File RelativePath=".\TDMA_Solver.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

@@ -22,7 +22,7 @@
             path_name = 'RESULT' 
             CALL SYSTEM('mkdir '//TRIM(path_name))
             CALL SETUP
-            
+
             OPEN(100,FILE=TRIM(path_name)//'/TEST.plt',FORM='FORMATTED',STATUS='REPLACE')
             CLOSE(100) 
 

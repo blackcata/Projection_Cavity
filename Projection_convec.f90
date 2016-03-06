@@ -23,7 +23,7 @@
                 ONLY : Nx, Ny, dx, dy
             
             USE projection_module,                                              &
-                ONLY : U, V, hx, hy
+                ONLY : U, V, Hx, Hy
             
             IMPLICIT NONE
 
@@ -43,7 +43,7 @@
                   Vd = (V(i,j-2) + V(i+1,j-2) + V(i,j-1) + V(i+1,j-1)) /4
                 END IF
                 
-                hx(i,j) = - ( U(i+1,j)*U(i+1,j) - U(i-1,j)*U(i-1,j) ) / (2*dx)  &
+                Hx(i,j) = - ( U(i+1,j)*U(i+1,j) - U(i-1,j)*U(i-1,j) ) / (2*dx)  &
                           - ( U(i,j+1)*Vu - U(i,j-1)*Vd) / (2*dy)
               END DO
             END DO
@@ -61,7 +61,7 @@
                   Ul = (U(i-2,j) + U(i-2,j+1) + U(i-1,j) + U(i-1,j+1)) / 4
                 END IF
 
-                hy(i,j) = - ( V(i,j+1)*V(i,j+1) - V(i,j-1)*V(i,j-1) ) / (2*dy)  &
+                Hy(i,j) = - ( V(i,j+1)*V(i,j+1) - V(i,j-1)*V(i,j-1) ) / (2*dy)  &
                           - ( V(i,j+1)*Ur - V(i,j-1)*Ul ) / (2*dx) 
               END DO
             END DO

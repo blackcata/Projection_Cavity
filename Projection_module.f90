@@ -11,18 +11,19 @@
 !   2016.03.02 Add the velocity and pressure arrays and initial velocity U0
 !   2016.03.03 Add the phi variable and tollerance and omega 
 !   2016.03.04 Add Divergence and Gradient subroutines in the moudule
-!   
+!   2016.03.06 Add the residual x and y term and dt
+!
 !-----------------------------------------------------------------------------------!
 
         MODULE projection_module
             
             INTEGER :: Nx, Ny
-            REAL(KIND=8) :: Re, dx, dy, Lx, Ly
+            REAL(KIND=8) :: Re, dt, dx, dy, Lx, Ly
             REAL(KIND=8) :: U0, tol, omega
             CHARACTER(LEN=65) :: file_name, path_name
  
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: U,V, Uhat, Vhat, UNew, VNew
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: P,VOR,Stream, hx, hy
+            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: P,VOR,Stream, Hx, Hy, Rx, Ry
             REAL(KIND=8), DIMENSION(:,:,:), ALLOCATABLE :: Phi
             
             SAVE
