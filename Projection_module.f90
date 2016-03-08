@@ -12,6 +12,7 @@
 !   2016.03.03 Add the phi variable and tollerance and omega 
 !   2016.03.04 Add Divergence and Gradient subroutines in the moudule
 !   2016.03.06 Add the residual & laplace x and y term and dt
+!   2016.03.08 Combined two gradient_phi_x,y subroutines to one subroutine
 !
 !-----------------------------------------------------------------------------------!
 
@@ -22,16 +23,16 @@
             REAL(KIND=8) :: U0, tol, omega
             CHARACTER(LEN=65) :: file_name, path_name
  
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: U,V, Uhat, Vhat, UNew, VNew
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: P,VOR,Stream
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: Rx, Ry, Hx, Hy, Lx, Ly
+            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: U,V, Uhat, Vhat, UNew, VNew
+            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: P,VOR,Stream
+            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: Rx, Ry, Hx, Hy, Lx, Ly
             REAL(KIND=8), DIMENSION(:,:,:), ALLOCATABLE :: Phi
             
             SAVE
             
         CONTAINS
     
-            SUBROUTINE Divergence(b)
+            SUBROUTINE DIVERGENCE(b)
                 
                 IMPLICIT NONE
                 INTEGER :: i,j    
@@ -45,29 +46,21 @@
             
             END SUBROUTINE Divergence
             
-            SUBROUTINE Gradient_phi_x(g)
+            SUBROUTINE GRADIENT(gx,gy)
                 
                 IMPLICIT NONE
                 INTEGER :: i,j
-                REAL(KIND=8) :: g(1:Nx-1,1:Ny)
+                REAL(KIND=8) :: gx(1:Nx-1,1:Ny), gy(1:Nx,1:Ny-1)
                 
                 DO j = 1,Ny
                     DO i = 1, Nx-1
-                        g(i,j) = (Phi(i+1,j,1) - Phi(i,j,1))/dx
+                        gx(i,j) = (Phi(i+1,j,1) - Phi(i,j,1))/dx
                     END DO
                 END DO
                 
-            END SUBROUTINE
-            
-            SUBROUTINE Gradient_phi_y(g)
-                
-                IMPLICIT NONE
-                INTEGER :: i,j
-                REAL(KIND=8) :: g(1:Nx,1:Ny-1)
-                
                 DO j = 1,Ny-1
                     DO i = 1, Nx
-                        g(i,j) = (Phi(i,j+1,1) - Phi(i,j,1))/dy
+                        gy(i,j) = (Phi(i,j+1,1) - Phi(i,j,1))/dy
                     END DO
                 END DO
                 
