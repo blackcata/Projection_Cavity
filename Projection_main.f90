@@ -15,10 +15,11 @@
                 ONLY : file_name, path_name
             
             USE projection_module,                                                &
-                ONLY : Nx, Ny, dx, dy
+                ONLY : Nx, Ny, dx, dy, PHI, Uhat, Vhat, U,V
 
             IMPLICIT NONE
-            
+            INTEGER :: i,j
+
             path_name = 'RESULT' 
             CALL SYSTEM('mkdir '//TRIM(path_name))
 
@@ -29,6 +30,15 @@
             CALL SOR
 
             OPEN(100,FILE=TRIM(path_name)//'/TEST.plt',FORM='FORMATTED',STATUS='REPLACE')
+            WRITE(100,*) 'VARIABLES = "x","y","U","uhat"'
+            WRITE(100,200)Nx-1, Ny
+            200 FORMAT('ZONE',2X,'I=',I3,2X,'J=',I3,2X,'F=POINT')
+            
+            DO j = 1,Ny
+              DO i = 1,Nx-1
+                WRITE(100,*) dx*i,dy*j,U(i,j),Uhat(i,j)
+              END DO
+            END DO
             CLOSE(100) 
 
             
