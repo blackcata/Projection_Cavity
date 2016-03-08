@@ -27,6 +27,7 @@
             CALL GETUH
             CALL GETVH
             CALL SOR
+            CALL UVNEW
 
             OPEN(100,FILE=TRIM(path_name)//'/TEST.plt',FORM='FORMATTED',STATUS='REPLACE')
             CLOSE(100) 

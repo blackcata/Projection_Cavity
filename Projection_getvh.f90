@@ -10,6 +10,7 @@
 !   2016.03.04 Add getdu and getdv code for 1st process of projection method
 !   2016.03.06 Change the files name and algorithm of this subroutine
 !   2016.03.08 Add the detail code and algorithm at this getuh code
+!   2016.03.08 Initialized the D,du,a,b,c
 !
 !-----------------------------------------------------------------------------------!
     
@@ -27,10 +28,17 @@
             REAL(KIND=8) :: D(1:Nx,1:Ny-1), dv(1:Nx,1:Ny-1)
             REAL(KIND=8), DIMENSION(:), ALLOCATABLE :: a,b,c
 
+            D = 0.0
+            dv = 0.0
+
             c1 = dt / (2*Re*dx**2)
             c2 = dt / (2*Re*dy**2)
 
             ALLOCATE( a(1:Nx), b(1:Nx), c(1:Nx) )
+            
+            a = 0.0
+            b = 0.0
+            c = 0.0
 
             DO j = 1, Ny-1
               a = -c1
@@ -43,6 +51,10 @@
             DEALLOCATE( a,b,c )
             ALLOCATE( a(1:Ny-1), b(1:Ny-1), c(1:Ny-1) )
             
+            a = 0.0
+            b = 0.0
+            c = 0.0
+
             DO i = 1,Nx
               a = -c2
               b = 1+2*c2

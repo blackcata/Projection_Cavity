@@ -3,6 +3,7 @@ TARGET= Projection_Cavity
 OBJECT= Projection_module.o Projection_main.o Projection_setup.o \
 		Projection_getuh.o Projection_getvh.o \
 		Projection_resi.o Projection_convec.o Projection_laplace.o  \
+		Projection_UVnew.o \
 		SOR_Poisson.o TDMA_Solver.o 
 
 all : $(TARGET)

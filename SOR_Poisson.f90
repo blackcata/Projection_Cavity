@@ -28,11 +28,12 @@
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: b
             
             ALLOCATE( b(1:Nx,1:Ny) )
-
+            b = 0.0
             beta = dx/dy
+
             CALL DIVERGENCE(b)
-            print*,b
             CALL CPU_TIME(t1)
+
             DO it = 1,100000
 
               DO j = 2, Ny-1
@@ -66,8 +67,8 @@
               Phi(:,:,0) = Phi(:,:,1)
 
             END DO
+
             DEALLOCATE(b)
-            PRINT*,phi
             CALL CPU_TIME(t2)
             
             print*,it,t2-t1
