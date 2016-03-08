@@ -26,7 +26,8 @@
             CALL RESI
             CALL GETUH
             CALL GETVH
-            
+            CALL SOR
+
             OPEN(100,FILE=TRIM(path_name)//'/TEST.plt',FORM='FORMATTED',STATUS='REPLACE')
             CLOSE(100) 
 

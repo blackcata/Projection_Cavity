@@ -9,6 +9,7 @@
 !   log 
 !   2016.03.04 Add SOR Solver of poisson equation and modified to optimize to 
 !              cavity problem and this projection code
+!   2016.03.08 Use Divergence subroutine and call divergence subroutine 
 !                                     
 !-----------------------------------------------------------------------------------! 
 
@@ -18,7 +19,7 @@
               ONLY : Nx, Ny, dx, dy, tol, omega
 
             USE projection_module,                                                          &
-                ONLY : Phi
+                ONLY : Phi, DIVERGENCE
             
             IMPLICIT NONE
             
@@ -29,8 +30,8 @@
             ALLOCATE( b(1:Nx,1:Ny) )
 
             beta = dx/dy
-            b = 0.0
-
+            CALL DIVERGENCE(b)
+            print*,b
             CALL CPU_TIME(t1)
             DO it = 1,100000
 
@@ -65,7 +66,10 @@
               Phi(:,:,0) = Phi(:,:,1)
 
             END DO
+            DEALLOCATE(b)
+            PRINT*,phi
             CALL CPU_TIME(t2)
+            
             print*,it,t2-t1
 
         END SUBROUTINE SOR

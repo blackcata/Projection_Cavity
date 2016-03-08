@@ -13,7 +13,7 @@
 !   2016.03.04 Add Divergence and Gradient subroutines in the moudule
 !   2016.03.06 Add the residual & laplace x and y term and dt
 !   2016.03.08 Combined two gradient_phi_x,y subroutines to one subroutine
-!
+!   2016,03.08 Modified divergence subroutine u -> uhat, v -> vhat
 !-----------------------------------------------------------------------------------!
 
         MODULE projection_module
@@ -40,11 +40,12 @@
                 
                 DO j = 1,Ny
                     DO i = 1,Nx
-                        b(i,j) = (U(i,j) - U(i-1,j)) / dx + (V(i,j) - V(i,j-1)) / dy
+                        b(i,j) = (Uhat(i,j) - Uhat(i-1,j)) / dx + & 
+                                 (Vhat(i,j) - Vhat(i,j-1)) / dy
                     END DO
                 END DO
             
-            END SUBROUTINE Divergence
+            END SUBROUTINE DIVERGENCE
             
             SUBROUTINE GRADIENT(gx,gy)
                 
