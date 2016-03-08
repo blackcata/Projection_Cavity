@@ -51,13 +51,11 @@
 
               DO j = 2,Ny-1
                   DO i = 2,Nx-1
-                      SUM1 = SUM1 + abs(Phi(i,j,1)) **2
-                      SUM2 = SUM2 + abs(Phi(i+1,j,1)+Phi(i-1,j,1)+Phi(i,j+1,1) &
-                                  +Phi(i,j-1,1) - 4*Phi(i,j,1)) **2
+                    SUM2 = (Phi(i,j,1) - Phi(i,j,0))**2
                   END DO
               END DO
 
-              rms = sqrt(SUM2/SUM1)
+              rms = sqrt(SUM2)
 
               If ( rms < tol ) EXIT
 
