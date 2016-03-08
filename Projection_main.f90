@@ -36,7 +36,7 @@
             
             DO j = 1,Ny
               DO i = 1,Nx-1
-                WRITE(100,*) dx*i,dy*j,U(i,j),Uhat(i,j)
+                WRITE(100,*) dx*i,dy*j,V(i,j),Vhat(i,j)
               END DO
             END DO
             CLOSE(100) 

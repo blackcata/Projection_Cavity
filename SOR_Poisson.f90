@@ -57,7 +57,7 @@
               END DO
 
               rms = sqrt(SUM2/SUM1)
-
+              WRITE(*,*) it,rms,tol 
               If ( rms < tol ) EXIT
 
               !----------------!
