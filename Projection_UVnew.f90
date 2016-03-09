@@ -8,13 +8,14 @@
 !                                                   
 !   log 
 !   2016.03.08 Add UVNew subroutine and programmed it.
+!   2016.03.09 Modified UNew,Vnew and Uhat,Vhat's arrays size, its size is different
 !
 !-----------------------------------------------------------------------------------!
     
         SUBROUTINE UVNEW
             
             USE projection_module,                                              &
-                ONLY : Nx, Ny, dt
+                ONLY : Nx, Ny, dt, U0, dx, dy, file_name, path_name
             
             USE projection_module,                                              &
                 ONLY : UNew, VNew, Uhat, Vhat, U, V, GRADIENT
@@ -29,9 +30,11 @@
 
             CALL GRADIENT(Gx,Gy)
 
-            UNew = Uhat - dt*Gx
-            VNew = Vhat - dt*Gy
-
+            UNew(1:Nx-1,1:Ny) = Uhat - dt*Gx
+            VNew(1:Nx,1:Ny-1) = Vhat - dt*Gy
+ 
+            UNew(:,Ny+1) = 2*U0 - U(:,Ny)
+            
             U = UNew
             V = VNew
 
