@@ -37,5 +37,6 @@
 		<File RelativePath=".\Projection_UVnew.f90"/>
 		<File RelativePath=".\SOR_Poisson.f90"/>
 		<File RelativePath=".\Projection_convec.f90"/>
+		<File RelativePath=".\Projection_output.f90"/>
 		<File RelativePath=".\TDMA_Solver.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

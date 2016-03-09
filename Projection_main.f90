@@ -25,12 +25,13 @@
 
             CALL SETUP
             
-            DO it = 1, 100
+            DO it = 1, 1
                 CALL RESI
                 CALL GETUH
                 CALL GETVH
                 CALL SOR
                 CALL UVNEW
+                CALL OUTPUT
             END DO
             
         END PROGRAM Projection_main
