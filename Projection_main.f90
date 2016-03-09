@@ -22,7 +22,7 @@
             
             path_name = 'RESULT' 
             CALL SYSTEM('mkdir '//TRIM(path_name))
-
+ 
             CALL SETUP
             
             DO it = 1, 1

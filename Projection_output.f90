@@ -6,8 +6,9 @@
 !    
 !                                                                2016.03.09 K.Noh
 !   log 
-!   2016.03.04 Add  output system file, this file'll make each variables for each
+!   2016.03.09 Add  output system file, this file'll make each variables for each
 !              files and it will trace each variables status 
+!   2016.03.09 Add U,V, Uhat, Vhat, Phi, Hx, Hy, Lx, Ly, Rx, Ry output system
 !
 !-----------------------------------------------------------------------------------!
     
@@ -51,12 +52,60 @@
             END DO
             CLOSE(100)
             
-!            ALLOCATE( U(0:Nx,0:Ny+1), V(0:Nx+1,0:Ny), P(1:Nx,1:Ny) )
-!            ALLOCATE( Uhat(1:Nx-1,1:Ny), Vhat(1:Nx,1:Ny-1) )
-!            ALLOCATE( Hx(1:Nx-1,1:Ny), Hy(1:Nx,1:Ny-1) )
-!            ALLOCATE( Lx(1:Nx-1,1:Ny), Ly(1:Nx,1:Ny-1) )
-!            ALLOCATE( Rx(1:Nx-1,1:Ny), Ry(1:Nx,1:Ny-1) )
-!            ALLOCATE( Unew(0:Nx,0:Ny+1), Vnew(0:Nx+1,0:Ny), Phi(1:Nx,1:Ny,0:1) )
+            file_name = TRIM(path_name)//'/Uhat.plt' 
+            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            WRITE(100,*)'VARIABLES="x","y","Uhat"'
+            WRITE(100,200) Nx-1, Ny
+            DO j = 1, Ny
+                DO i = 1, Nx-1
+                    WRITE(100,*) i*dx, j*dy, Uhat(i,j)
+                END DO
+            END DO
+            CLOSE(100)
+            
+            file_name = TRIM(path_name)//'/Vhat.plt' 
+            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            WRITE(100,*)'VARIABLES="x","y","Vhat"'
+            WRITE(100,200) Nx, Ny-1
+            DO j = 1, Ny-1
+                DO i = 1, Nx
+                    WRITE(100,*) i*dx, j*dy, Vhat(i,j)
+                END DO
+            END DO
+            CLOSE(100)
+            
+            file_name = TRIM(path_name)//'/Resi_x.plt' 
+            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            WRITE(100,*)'VARIABLES="x","y","Hx","Lx","Rx"'
+            WRITE(100,200) Nx-1, Ny
+            DO j = 1, Ny
+                DO i = 1, Nx-1
+                    WRITE(100,*) i*dx, j*dy, Hx(i,j), Lx(i,j), Rx(i,j)
+                END DO
+            END DO
+            CLOSE(100)
+            
+            file_name = TRIM(path_name)//'/Resi_y.plt' 
+            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            WRITE(100,*)'VARIABLES="x","y","Hy","Ly","Ry"'
+            WRITE(100,200) Nx, Ny-1
+            DO j = 1, Ny-1
+                DO i = 1, Nx
+                    WRITE(100,*) i*dx, j*dy, Hy(i,j), Ly(i,j), Ry(i,j)
+                END DO
+            END DO
+            CLOSE(100)
+            
+            file_name = TRIM(path_name)//'/Phi.plt' 
+            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            WRITE(100,*)'VARIABLES="x","y","Phi"'
+            WRITE(100,200) Nx, Ny
+            DO j = 1, Ny
+                DO i = 1, Nx
+                    WRITE(100,*) i*dx, j*dy, Phi(i,j,1)
+                END DO
+            END DO
+            CLOSE(100)           
             
         END SUBROUTINE OUTPUT
 
