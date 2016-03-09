@@ -18,20 +18,20 @@
                 ONLY : Nx, Ny, dx, dy
 
             IMPLICIT NONE
+            INTEGER :: it
             
             path_name = 'RESULT' 
             CALL SYSTEM('mkdir '//TRIM(path_name))
 
             CALL SETUP
-            CALL RESI
-            CALL GETUH
-            CALL GETVH
-            CALL SOR
-            CALL UVNEW
-
-            OPEN(100,FILE=TRIM(path_name)//'/TEST.plt',FORM='FORMATTED',STATUS='REPLACE')
-            CLOSE(100) 
-
+            
+            DO it = 1, 100
+                CALL RESI
+                CALL GETUH
+                CALL GETVH
+                CALL SOR
+                CALL UVNEW
+            END DO
             
         END PROGRAM Projection_main
 
