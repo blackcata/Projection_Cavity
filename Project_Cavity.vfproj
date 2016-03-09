@@ -34,6 +34,7 @@
 		<File RelativePath=".\Projection_module.f90"/>
 		<File RelativePath=".\Projection_resi.f90"/>
 		<File RelativePath=".\Projection_setup.f90"/>
+		<File RelativePath=".\Projection_UVnew.f90"/>
 		<File RelativePath=".\SOR_Poisson.f90"/>
 		<File RelativePath=".\Projection_convec.f90"/>
 		<File RelativePath=".\TDMA_Solver.f90"/></Filter></Files>

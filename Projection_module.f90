@@ -13,7 +13,8 @@
 !   2016.03.04 Add Divergence and Gradient subroutines in the moudule
 !   2016.03.06 Add the residual & laplace x and y term and dt
 !   2016.03.08 Combined two gradient_phi_x,y subroutines to one subroutine
-!   2016,03.08 Modified divergence subroutine u -> uhat, v -> vhat
+!   2016.03.08 Modified divergence subroutine u -> uhat, v -> vhat
+!   2016.03.09 Modified Divergence subroutines index and boundary condition
 !
 !-----------------------------------------------------------------------------------!
 
@@ -37,12 +38,27 @@
                 
                 IMPLICIT NONE
                 INTEGER :: i,j    
-                REAL(KIND=8) :: b(1:Nx,1:Ny)
+                REAL(KIND=8) :: b(1:Nx,1:Ny), duhat, dvhat
                 
                 DO j = 1,Ny
                     DO i = 1,Nx
-                        b(i,j) = (Uhat(i,j) - Uhat(i-1,j)) / dx + & 
-                                 (Vhat(i,j) - Vhat(i,j-1)) / dy
+                        IF (i==1) THEN
+                            duhat = Uhat(i,j)
+                        ELSEIF (i==Nx) THEN
+                            duhat = -Uhat(i-1,j)
+                        ELSE
+                            duhat = Uhat(i,j) - Uhat(i-1,j)
+                        END IF
+                        
+                        IF (j==1) THEN
+                            dvhat = Vhat(i,j)
+                        ELSEIF (j==NY) THEN
+                            dvhat = -Vhat(i,j-1)
+                        ELSE
+                            dvhat = Vhat(i,j) - Vhat(i,j-1)
+                        END IF
+                        
+                        b(i,j) = duhat / dx + dvhat / dy
                     END DO
                 END DO
             
