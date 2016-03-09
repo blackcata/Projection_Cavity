@@ -52,8 +52,9 @@
               DO j = 2,Ny-1
                   DO i = 2,Nx-1
                       SUM1 = SUM1 + abs(Phi(i,j,1)) **2
-                      SUM2 = SUM2 + abs(Phi(i+1,j,1)+Phi(i-1,j,1)+Phi(i,j+1,1) &
-                                  +Phi(i,j-1,1) - 4*Phi(i,j,1)) **2
+                      SUM2 = SUM2 + abs(Phi(i+1,j,1)+Phi(i-1,j,1) + &
+                                        beta**2 *(Phi(i,j+1,1) +Phi(i,j-1,1)) - &
+                                        (2+2*beta**2)*Phi(i,j,1) - dx*dx*b(i,j)) **2
                   END DO
               END DO
 
