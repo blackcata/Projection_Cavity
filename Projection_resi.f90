@@ -24,14 +24,20 @@
             INTEGER :: i, j
             REAL(8) :: Hx_pr(1:Nx-1,1:Ny), Hy_pr(1:Nx,1:Ny-1)
 
+            Rx = 0.0
+            Ry = 0.0
+            
+            Hx_Pr = 0.0
+            Hy_Pr = 0.0
+            
             Hx_pr = Hx
             Hy_pr = Hy
 
             CALL CONVEC
             CALL LAPLACE
 
-            Rx = dt/2 * ( 3*Hx - Hx_pr) + dt/Re * Lx
-            Ry = dt/2 * ( 3*Hy - Hy_Pr) + dt/Re * Ly
-
+            Rx = dt/2 * ( 3*Hx - Hx_pr ) + dt/Re * Lx
+            Ry = dt/2 * ( 3*Hy - Hy_Pr ) + dt/Re * Ly
+            
         END SUBROUTINE RESI
     

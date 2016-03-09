@@ -29,8 +29,8 @@
             Re = 100
             dt = 0.1
 
-            Nx = 10
-            Ny = 10
+            Nx = 30
+            Ny = 30
             
             ALx = 1.0
             ALy = 1.0
@@ -65,7 +65,7 @@
             Rx = 0.0
             Ry = 0.0
              
-            U(:,NY-1:Ny) = U0
+            U(:,Ny+1) = U0
             
         END SUBROUTINE SETUP
     

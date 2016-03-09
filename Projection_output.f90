@@ -9,6 +9,7 @@
 !   2016.03.09 Add  output system file, this file'll make each variables for each
 !              files and it will trace each variables status 
 !   2016.03.09 Add U,V, Uhat, Vhat, Phi, Hx, Hy, Lx, Ly, Rx, Ry output system
+!   2016.03.09 Change the total number of x-grid and y-grid in V.Plt file
 !
 !-----------------------------------------------------------------------------------!
     
@@ -44,7 +45,7 @@
             file_name = TRIM(path_name)//'/V.plt' 
             OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
             WRITE(100,*)'VARIABLES="x","y","V"'
-            WRITE(100,200) Nx+1, Ny+2
+            WRITE(100,200) Nx+2, Ny+1
             DO j = 0, Ny
                 DO i = 0, Nx+1
                     WRITE(100,*) i*dx, j*dy, V(i,j)

@@ -15,7 +15,7 @@
                 ONLY : file_name, path_name
             
             USE projection_module,                                                &
-                ONLY : Nx, Ny, dx, dy
+                ONLY : Nx, Ny, dx, dy,Rx
 
             IMPLICIT NONE
             INTEGER :: it
@@ -24,6 +24,8 @@
             CALL SYSTEM('mkdir '//TRIM(path_name))
  
             CALL SETUP
+            
+            !---------- Main Loop ---------!
             
             DO it = 1, 1
                 CALL RESI
