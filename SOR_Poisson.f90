@@ -10,6 +10,7 @@
 !   2016.03.04 Add SOR Solver of poisson equation and modified to optimize to 
 !              cavity problem and this projection code
 !   2016.03.08 Use Divergence subroutine and call divergence subroutine 
+!   2016.03.11 Modified the format of printing consuming time of SOR
 !                                     
 !-----------------------------------------------------------------------------------! 
 
@@ -72,6 +73,6 @@
             DEALLOCATE(b)
             CALL CPU_TIME(t2)
             
-            print*,it,t2-t1
+            WRITE(*,FMT='(A,I3,A,F10.7)'),'Total Iteration is ',it,' and total time for SOR is ', t2-t1
 
         END SUBROUTINE SOR

@@ -28,6 +28,7 @@
             !---------- Main Loop ---------!
             
             DO it = 1, 1
+                CALL CFL
                 CALL RESI
                 CALL GETUH
                 CALL GETVH

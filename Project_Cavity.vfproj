@@ -27,16 +27,17 @@
 		<Filter Name="Header Files" Filter="fi;fd;h;inc"/>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath=".\Projection_convec.f90"/>
 		<File RelativePath=".\Projection_getuh.f90"/>
 		<File RelativePath=".\Projection_getvh.f90"/>
 		<File RelativePath=".\Projection_laplace.f90"/>
 		<File RelativePath=".\Projection_main.f90"/>
 		<File RelativePath=".\Projection_module.f90"/>
+		<File RelativePath=".\Projection_output.f90"/>
 		<File RelativePath=".\Projection_resi.f90"/>
 		<File RelativePath=".\Projection_setup.f90"/>
 		<File RelativePath=".\Projection_UVnew.f90"/>
 		<File RelativePath=".\SOR_Poisson.f90"/>
-		<File RelativePath=".\Projection_convec.f90"/>
-		<File RelativePath=".\Projection_output.f90"/>
+		<File RelativePath=".\Projection_CFL.f90"/>
 		<File RelativePath=".\TDMA_Solver.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
