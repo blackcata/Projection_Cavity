@@ -11,6 +11,7 @@
 !   2016.03.03 Setup the omega and tollerance value and allocate phi 
 !   2016.03.04 Add Unew, Vnea, Uhat, Vhat, hx, hy arrays and initialized    
 !   2016.03.06 Add the residual term rx, ry and initialized and dt term
+!   2016.03.11 Change the dt's value because it have to satisfy CFL condition 
 !
 !-----------------------------------------------------------------------------------!
     
@@ -27,7 +28,7 @@
 
             U0 = 1.0
             Re = 100
-            dt = 0.1
+            dt = 0.001
 
             Nx = 30
             Ny = 30
