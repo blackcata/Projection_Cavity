@@ -28,7 +28,7 @@
 
             U0 = 1.0
             Re = 100
-            dt = 0.01
+            dt = 0.003
 
             Nx = 50
             Ny = 50
@@ -39,7 +39,7 @@
             dx = ALx / Nx
             dy = ALy / Ny
             
-            omega = 1.85
+            omega = 1.5
             tol = 1e-4
             
             ALLOCATE( U(0:Nx,0:Ny+1), V(0:Nx+1,0:Ny), P(1:Nx,1:Ny) )
