@@ -10,6 +10,7 @@
 !              files and it will trace each variables status 
 !   2016.03.09 Add U,V, Uhat, Vhat, Phi, Hx, Hy, Lx, Ly, Rx, Ry output system
 !   2016.03.09 Change the total number of x-grid and y-grid in V.Plt file
+!   2016.03.15 Add 2 FORMAT to trace the time-series of each variables
 !
 !-----------------------------------------------------------------------------------!
     

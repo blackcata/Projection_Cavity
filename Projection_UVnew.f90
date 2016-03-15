@@ -29,7 +29,7 @@
             Gy = 0.0
 
             CALL GRADIENT(Gx,Gy)
-
+            
             UNew(1:Nx-1,1:Ny) = Uhat - dt*Gx
             VNew(1:Nx,1:Ny-1) = Vhat - dt*Gy
  
@@ -37,6 +37,6 @@
             
             U = UNew
             V = VNew
-
+            
         END SUBROUTINE UVNEW
     

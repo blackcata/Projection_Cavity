@@ -11,7 +11,7 @@
 !   2016.03.06 Add how to calculate Hx and Hy considering boundary condition
 !
 !   caution 
-!     This code is assumed the non-slip boundary condition.
+!     This code is assumed the no-slip boundary condition.
 !     But at surface of upper boundary case, I cannot assure that this 
 !     assumtion U = U0, V = 0 is right or not.
 !

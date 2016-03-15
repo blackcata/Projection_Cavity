@@ -18,7 +18,8 @@
         SUBROUTINE SETUP
             
             USE projection_module,                                              &
-                ONLY : Nx, Ny, dx, dy, ALx, ALy, omega, tol, Re, U0, dt
+                ONLY : Nx, Ny, dx, dy, ALx, ALy, omega, tol, Re, U0, dt,        &
+                       PRINT_NUM, TOTAL_IT
             
             USE projection_module,                                              &
                 ONLY : U, V, Uhat, Vhat, Unew, Vnew, P, Phi,                    &
@@ -26,12 +27,15 @@
             
             IMPLICIT NONE
 
+            PRINT_NUM = 20
+            TOTAL_IT = 100
+            
             U0 = 1.0
             Re = 100
-            dt = 0.02
+            dt = 0.001
 
-            Nx = 20
-            Ny = 20
+            Nx = 100
+            Ny = 100
             
             ALx = 1.0
             ALy = 1.0
@@ -39,7 +43,7 @@
             dx = ALx / Nx
             dy = ALy / Ny
             
-            omega = 1.5
+            omega = 1.0
             tol = 1e-4
             
             ALLOCATE( U(0:Nx,0:Ny+1), V(0:Nx+1,0:Ny), P(1:Nx,1:Ny) )

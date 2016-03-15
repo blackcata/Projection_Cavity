@@ -15,12 +15,13 @@
 !   2016.03.08 Combined two gradient_phi_x,y subroutines to one subroutine
 !   2016.03.08 Modified divergence subroutine u -> uhat, v -> vhat
 !   2016.03.09 Modified Divergence subroutines index and boundary condition
+!   2016.03.15 Add the printing number, total iteration integer variable 
 !
 !-----------------------------------------------------------------------------------!
 
         MODULE projection_module
             
-            INTEGER :: Nx, Ny
+            INTEGER :: Nx, Ny, PRINT_NUM, TOTAL_IT
             REAL(KIND=8) :: Re, dt, dx, dy, ALx, ALy
             REAL(KIND=8) :: U0, tol, omega
             CHARACTER(LEN=65) :: file_name, path_name
