@@ -33,7 +33,7 @@
             UNew(1:Nx-1,1:Ny) = Uhat - dt*Gx
             VNew(1:Nx,1:Ny-1) = Vhat - dt*Gy
  
-            UNew(:,Ny+1) = 2*U0 - UNew(:,Ny)
+            UNew(:,Ny+1) = U0
             
             U = UNew
             V = VNew

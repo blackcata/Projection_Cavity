@@ -39,7 +39,7 @@
                 CALL GETVH
                 CALL SOR
                 CALL UVNEW
-                CALL OUTPUT
+                CALL OUTPUT(it)
             END DO
             
         END PROGRAM Projection_main

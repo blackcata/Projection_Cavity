@@ -13,7 +13,7 @@
 !
 !-----------------------------------------------------------------------------------!
     
-        SUBROUTINE OUTPUT
+        SUBROUTINE OUTPUT(TS)
 
             USE projection_module,                                                &
                 ONLY : file_name, path_name
@@ -27,13 +27,18 @@
             
             IMPLICIT NONE
             INTEGER :: i,j
+            INTEGER, INTENT(IN) :: TS
             
             
-200         FORMAT('ZONE',2X,'I=',I3,2X,'J=',I3,2X,'F=POINT')
+200         FORMAT('I=',I3,2X,'J=',I3,2X,'F=POINT')
+300         FORMAT('STRANDID=1, SOLUTIONTIME=',I5)
+400         FORMAT('ZONE T= "Timestep ',I5,'"')
             
             file_name = TRIM(path_name)//'/U.plt' 
             OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
-            WRITE(100,*)'VARIABLES="x","y","U"'
+            WRITE(100,*) 'VARIABLES="x","y","U"'
+            WRITE(100,400) TS
+            WRITE(100,300) TS
             WRITE(100,200) Nx+1, Ny+2
             DO j = 0, Ny+1
                 DO i = 0, Nx
@@ -45,6 +50,8 @@
             file_name = TRIM(path_name)//'/V.plt' 
             OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","V"'
+            WRITE(100,400) TS
+            WRITE(100,300) TS
             WRITE(100,200) Nx+2, Ny+1
             DO j = 0, Ny
                 DO i = 0, Nx+1
@@ -56,6 +63,8 @@
             file_name = TRIM(path_name)//'/Uhat.plt' 
             OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Uhat"'
+            WRITE(100,400) TS
+            WRITE(100,300) TS
             WRITE(100,200) Nx-1, Ny
             DO j = 1, Ny
                 DO i = 1, Nx-1
@@ -67,6 +76,8 @@
             file_name = TRIM(path_name)//'/Vhat.plt' 
             OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Vhat"'
+            WRITE(100,400) TS
+            WRITE(100,300) TS
             WRITE(100,200) Nx, Ny-1
             DO j = 1, Ny-1
                 DO i = 1, Nx
@@ -78,6 +89,8 @@
             file_name = TRIM(path_name)//'/Resi_x.plt' 
             OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Hx","Lx","Rx"'
+            WRITE(100,400) TS
+            WRITE(100,300) TS
             WRITE(100,200) Nx-1, Ny
             DO j = 1, Ny
                 DO i = 1, Nx-1
@@ -89,6 +102,8 @@
             file_name = TRIM(path_name)//'/Resi_y.plt' 
             OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Hy","Ly","Ry"'
+            WRITE(100,400) TS
+            WRITE(100,300) TS
             WRITE(100,200) Nx, Ny-1
             DO j = 1, Ny-1
                 DO i = 1, Nx
@@ -100,6 +115,8 @@
             file_name = TRIM(path_name)//'/Phi.plt' 
             OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Phi"'
+            WRITE(100,400) TS
+            WRITE(100,300) TS
             WRITE(100,200) Nx, Ny
             DO j = 1, Ny
                 DO i = 1, Nx
@@ -109,4 +126,3 @@
             CLOSE(100)           
             
         END SUBROUTINE OUTPUT
-
