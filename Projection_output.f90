@@ -32,7 +32,7 @@
 200         FORMAT('ZONE',2X,'I=',I3,2X,'J=',I3,2X,'F=POINT')
             
             file_name = TRIM(path_name)//'/U.plt' 
-            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","U"'
             WRITE(100,200) Nx+1, Ny+2
             DO j = 0, Ny+1
@@ -43,7 +43,7 @@
             CLOSE(100)
             
             file_name = TRIM(path_name)//'/V.plt' 
-            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","V"'
             WRITE(100,200) Nx+2, Ny+1
             DO j = 0, Ny
@@ -54,7 +54,7 @@
             CLOSE(100)
             
             file_name = TRIM(path_name)//'/Uhat.plt' 
-            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Uhat"'
             WRITE(100,200) Nx-1, Ny
             DO j = 1, Ny
@@ -65,7 +65,7 @@
             CLOSE(100)
             
             file_name = TRIM(path_name)//'/Vhat.plt' 
-            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Vhat"'
             WRITE(100,200) Nx, Ny-1
             DO j = 1, Ny-1
@@ -76,7 +76,7 @@
             CLOSE(100)
             
             file_name = TRIM(path_name)//'/Resi_x.plt' 
-            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Hx","Lx","Rx"'
             WRITE(100,200) Nx-1, Ny
             DO j = 1, Ny
@@ -87,7 +87,7 @@
             CLOSE(100)
             
             file_name = TRIM(path_name)//'/Resi_y.plt' 
-            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Hy","Ly","Ry"'
             WRITE(100,200) Nx, Ny-1
             DO j = 1, Ny-1
@@ -98,7 +98,7 @@
             CLOSE(100)
             
             file_name = TRIM(path_name)//'/Phi.plt' 
-            OPEN(100,FILE=file_name,FORM='FORMATTED',STATUS='REPLACE')
+            OPEN(100,FILE=file_name,FORM='FORMATTED',POSITION='APPEND')
             WRITE(100,*)'VARIABLES="x","y","Phi"'
             WRITE(100,200) Nx, Ny
             DO j = 1, Ny

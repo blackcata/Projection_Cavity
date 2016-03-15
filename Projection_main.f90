@@ -22,12 +22,17 @@
             
             path_name = 'RESULT' 
             CALL SYSTEM('mkdir '//TRIM(path_name))
- 
+            
+            ! Remove command - windows
+            CALL SYSTEM('del /q '//TRIM(path_name)//'\*')
+            ! Remove command - linux & unix
+            !CALL SYSTEM('rm -rf ./'//TRIM(path_name)//'/*')
+           
             CALL SETUP
             
             !---------- Main Loop ---------!
             
-            DO it = 1, 100
+            DO it = 1, 10
                 CALL CFL
                 CALL RESI
                 CALL GETUH
