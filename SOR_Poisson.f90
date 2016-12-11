@@ -2,32 +2,32 @@
 !
 !  PROGRAM: SOR_Poisson.f90
 !
-!  PURPOSE: To solve the poisson equation by SOR Method 
+!  PURPOSE: To solve the poisson equation by SOR Method
 !
 !                                                                2016.03.04 K.Noh
 !
-!   log 
-!   2016.03.04 Add SOR Solver of poisson equation and modified to optimize to 
+!   log
+!   2016.03.04 Add SOR Solver of poisson equation and modified to optimize to
 !              cavity problem and this projection code
-!   2016.03.08 Use Divergence subroutine and call divergence subroutine 
+!   2016.03.08 Use Divergence subroutine and call divergence subroutine
 !   2016.03.11 Modified the format of printing consuming time of SOR
-!                                     
-!-----------------------------------------------------------------------------------! 
+!
+!-----------------------------------------------------------------------------------!
 
         SUBROUTINE SOR
 
             USE projection_module,                                                          &
-              ONLY : Nx, Ny, dx, dy, tol, omega
+              ONLY : Nx, Ny, dx, dy, tol, omega, ITMAX
 
             USE projection_module,                                                          &
                 ONLY : Phi, DIVERGENCE
-            
+
             IMPLICIT NONE
-            
+
             INTEGER :: i, j, it
             REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: b
-            
+
             ALLOCATE( b(1:Nx,1:Ny) )
             b = 0.0
             beta = dx/dy
@@ -35,7 +35,7 @@
             CALL DIVERGENCE(b)
             CALL CPU_TIME(t1)
 
-            DO it = 1,100000
+            DO it = 1,ITMAX
 
               DO j = 2, Ny-1
                 DO i = 2, Nx-1
@@ -72,7 +72,7 @@
 
             DEALLOCATE(b)
             CALL CPU_TIME(t2)
-            
+
             WRITE(*,FMT='(A,I3,A,F10.7)'),'Total Iteration is ',it,' and total time for SOR is ', t2-t1
 
         END SUBROUTINE SOR
