@@ -27,9 +27,8 @@
             CHARACTER(LEN=65) :: file_name, path_name
 
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: U,V, Uhat, Vhat, UNew, VNew
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: P,VOR,Stream
+            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: P,VOR,Stream,Phi
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: Rx, Ry, Hx, Hy, Lx, Ly
-            REAL(KIND=8), DIMENSION(:,:,:), ALLOCATABLE :: Phi
 
             SAVE
 
@@ -73,13 +72,13 @@
 
                 DO j = 1,Ny
                     DO i = 1, Nx-1
-                        gx(i,j) = (Phi(i+1,j,1) - Phi(i,j,1))/dx
+                        gx(i,j) = (Phi(i+1,j) - Phi(i,j))/dx
                     END DO
                 END DO
 
                 DO j = 1,Ny-1
                     DO i = 1, Nx
-                        gy(i,j) = (Phi(i,j+1,1) - Phi(i,j,1))/dy
+                        gy(i,j) = (Phi(i,j+1) - Phi(i,j))/dy
                     END DO
                 END DO
 

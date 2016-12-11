@@ -1,5 +1,5 @@
 F90=ifort
-FCFLAGS=-O2 
+FCFLAGS=-O2
 
 TARGET= Projection_Cavity
 OBJECT= Projection_module.o Projection_main.o Projection_setup.o \

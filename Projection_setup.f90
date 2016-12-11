@@ -52,12 +52,13 @@
             ALLOCATE( Hx(1:Nx-1,1:Ny), Hy(1:Nx,1:Ny-1) )
             ALLOCATE( Lx(1:Nx-1,1:Ny), Ly(1:Nx,1:Ny-1) )
             ALLOCATE( Rx(1:Nx-1,1:Ny), Ry(1:Nx,1:Ny-1) )
-            ALLOCATE( Unew(0:Nx,0:Ny+1), Vnew(0:Nx+1,0:Ny), Phi(1:Nx,1:Ny,0:1) )
+            ALLOCATE( Unew(0:Nx,0:Ny+1), Vnew(0:Nx+1,0:Ny), Phi(1:Nx,1:Ny) )
 
             U = 0.0
             V = 0.0
             P = 0.0
             Phi = 0.0
+            Phi(1:Nx,1) = 1.0
 
             Unew = 0.0
             Vnew = 0.0
