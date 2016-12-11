@@ -16,63 +16,101 @@
 
         SUBROUTINE SOR
 
-            USE projection_module,                                                          &
+            USE projection_module,                                              &
               ONLY : Nx, Ny, dx, dy, tol, omega, ITMAX
 
-            USE projection_module,                                                          &
+            USE projection_module,                                              &
                 ONLY : Phi, DIVERGENCE
 
             IMPLICIT NONE
 
             INTEGER :: i, j, it
             REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2
-            REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE :: b
+            REAL(KIND=8),DIMENSION(:,:),ALLOCATABLE :: b, phi_new
 
-            ALLOCATE( b(1:Nx,1:Ny) )
-            b = 0.0
+            ALLOCATE( b(1:Nx,1:Ny),phi_new(1:Nx,1:Ny) )
+
+            b(1:Nx,1:Ny)       = 0.0
+            phi_new(1:Nx,1:Ny) = 0.0
             beta = dx/dy
 
-            CALL DIVERGENCE(b)
+            ! CALL DIVERGENCE(b)
             CALL CPU_TIME(t1)
 
-            DO it = 1,ITMAX
-
-              DO j = 2, Ny-1
-                DO i = 2, Nx-1
-                  Phi(i,j,1) = (Phi(i+1,j,0) + Phi(i-1,j,1) + &
-                             (beta**2) * (Phi(i,j+1,0) + Phi(i,j-1,1)) - dx*dx*b(i,j) ) &
-                                 / (2+2*beta**2)
-                  Phi(i,j,1) = omega * Phi(i,j,1) + (1-omega) * Phi(i,j,0)
-                END DO
-              END DO
-
-              rms = 0.0
+            !------------------------------------------------------------------!
+            !                      Main Loop of SOR method                     !
+            !------------------------------------------------------------------!
+            DO it=1,ITMAX
               SUM1 = 0.0
               SUM2 = 0.0
 
-              DO j = 2,Ny-1
-                  DO i = 2,Nx-1
-                      SUM1 = SUM1 + abs(Phi(i,j,1)) **2
-                      SUM2 = SUM2 + abs(Phi(i+1,j,1)+Phi(i-1,j,1) + &
-                                        beta**2 *(Phi(i,j+1,1) +Phi(i,j-1,1)) - &
-                                        (2+2*beta**2)*Phi(i,j,1) - dx*dx*b(i,j)) **2
-                  END DO
+              !----------------------------------------------------------------!
+              !                           Update red nodes                     !
+              !----------------------------------------------------------------!
+              DO j=2,Ny-1
+                DO i=2,Nx-1
+                    IF((mod(i+j,2))==0) THEN
+                      phi_new(i,j) = ( phi(i+1,j)+phi(i-1,j)                    &
+                                      + beta**2*(phi(i,j+1)+phi(i,j-1))         &
+                                      - dx*dx*b(i,j) ) / (2*(1+beta**2))
+                      phi_new(i,j) = phi(i,j) + omega*(phi_new(i,j) - phi(i,j))
+                    END IF
+                END DO
               END DO
 
-              rms = sqrt(SUM2/SUM1)
+              !----------------------------------------------------------------!
+              !                         Update black nodes                     !
+              !----------------------------------------------------------------!
+              DO j=2,Ny-1
+                DO i=2,Nx-1
+                    IF((mod(i+j,2))==1) THEN
+                      phi_new(i,j) = ( phi_new(i+1,j)+phi_new(i-1,j)            &
+                                      + beta**2*(phi_new(i,j+1)+phi_new(i,j-1)) &
+                                      - dx*dx*b(i,j) ) / (2*(1+beta**2))
+                      phi_new(i,j) = phi(i,j) + omega*(phi_new(i,j) - phi(i,j))
+                    END IF
+                END DO
+              END DO
 
-              If ( rms < tol ) EXIT
+              !----------------------------------------------------------------!
+              !                       Boundary Conditions                      !
+              !----------------------------------------------------------------!
+              DO j = 1,Ny
+                phi_new(1,j)  = 0.0
+                phi_new(Nx,j) = 0.0
+              END DO
 
-              !----------------!
-              !    Updating    !
-              !----------------!
-              Phi(:,:,0) = Phi(:,:,1)
+              Do i = 1,Nx
+                phi_new(i,1)  = 1.0
+                phi_new(i,Ny) = 0.0
+              END DO
+
+              !----------------------------------------------------------------!
+              !                       Convergence Criteria                     !
+              !----------------------------------------------------------------!
+              DO j = 2,Ny-1
+                DO i = 2,Nx-1
+                  SUM1 = SUM1 + abs(phi_new(i,j))
+                  SUM2 = SUM2 + abs( phi_new(i+1,j)+phi_new(i-1,j)              &
+                                  + beta**2*(phi_new(i,j+1)+phi_new(i,j-1))     &
+                                  -(2+2*beta**2)*phi_new(i,j)- dx*dx*b(i,j) )
+                END DO
+              END DO
+
+              WRITE(*,"(I5,2X,3(F15.7,2X))") it, SUM2/SUM1, tol
+              IF ( SUM2/SUM1 < tol ) EXIT
+
+              !----------------------------------------------------------------!
+              !                               Update                           !
+              !----------------------------------------------------------------!
+              phi(1:Nx,1:Ny) = phi_new(1:Nx,1:Ny)
 
             END DO
 
-            DEALLOCATE(b)
+            DEALLOCATE(b,phi_new)
             CALL CPU_TIME(t2)
 
-            WRITE(*,FMT='(A,I3,A,F10.7)'),'Total Iteration is ',it,' and total time for SOR is ', t2-t1
+            WRITE(*,FMT='(A,I5,A,F10.7,A)')                                     &
+                'Total Iteration is ',it,' and total time for SOR is ',t2-t1,'s'
 
         END SUBROUTINE SOR

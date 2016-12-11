@@ -45,7 +45,7 @@
             dy = ALy / Ny
 
             omega = 1.0
-            tol = 1e-4
+            tol = 1e-6
 
             ALLOCATE( U(0:Nx,0:Ny+1), V(0:Nx+1,0:Ny), P(1:Nx,1:Ny) )
             ALLOCATE( Uhat(1:Nx-1,1:Ny), Vhat(1:Nx,1:Ny-1) )
