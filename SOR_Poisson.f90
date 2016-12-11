@@ -17,7 +17,7 @@
         SUBROUTINE SOR
 
             USE projection_module,                                              &
-              ONLY : Nx, Ny, dx, dy, tol, omega, ITMAX
+              ONLY : Nx, Ny, dx, dy, dt, tol, omega, ITMAX
 
             USE projection_module,                                              &
                 ONLY : Phi, DIVERGENCE
@@ -34,7 +34,9 @@
             phi_new(1:Nx,1:Ny) = 0.0
             beta = dx/dy
 
-            ! CALL DIVERGENCE(b)
+            WRITE(*,*) '-------------------------------------------------------'
+            WRITE(*,*) '                  SOR PROCESS STARTED                  '
+            CALL DIVERGENCE(b)
             CALL CPU_TIME(t1)
 
             !------------------------------------------------------------------!
@@ -52,7 +54,7 @@
                     IF((mod(i+j,2))==0) THEN
                       phi_new(i,j) = ( phi(i+1,j)+phi(i-1,j)                    &
                                       + beta**2*(phi(i,j+1)+phi(i,j-1))         &
-                                      - dx*dx*b(i,j) ) / (2*(1+beta**2))
+                                      - dx*dx*b(i,j)/dt ) / (2*(1+beta**2))
                       phi_new(i,j) = phi(i,j) + omega*(phi_new(i,j) - phi(i,j))
                     END IF
                 END DO
@@ -66,7 +68,7 @@
                     IF((mod(i+j,2))==1) THEN
                       phi_new(i,j) = ( phi_new(i+1,j)+phi_new(i-1,j)            &
                                       + beta**2*(phi_new(i,j+1)+phi_new(i,j-1)) &
-                                      - dx*dx*b(i,j) ) / (2*(1+beta**2))
+                                      - dx*dx*b(i,j)/dt ) / (2*(1+beta**2))
                       phi_new(i,j) = phi(i,j) + omega*(phi_new(i,j) - phi(i,j))
                     END IF
                 END DO
@@ -93,11 +95,11 @@
                   SUM1 = SUM1 + abs(phi_new(i,j))
                   SUM2 = SUM2 + abs( phi_new(i+1,j)+phi_new(i-1,j)              &
                                   + beta**2*(phi_new(i,j+1)+phi_new(i,j-1))     &
-                                  -(2+2*beta**2)*phi_new(i,j)- dx*dx*b(i,j) )
+                                  -(2+2*beta**2)*phi_new(i,j)- dx*dx*b(i,j)/dt )
                 END DO
               END DO
 
-              WRITE(*,"(I5,2X,3(F15.7,2X))") it, SUM2/SUM1, tol
+              ! WRITE(*,"(I5,2X,3(F15.7,2X))") it, SUM2/SUM1, tol
               IF ( SUM2/SUM1 < tol ) EXIT
 
               !----------------------------------------------------------------!
@@ -110,7 +112,10 @@
             DEALLOCATE(b,phi_new)
             CALL CPU_TIME(t2)
 
+            WRITE(*,*) '                   SOR PROCESS ENDED                   '
             WRITE(*,FMT='(A,I5,A,F10.7,A)')                                     &
-                'Total Iteration is ',it,' and total time for SOR is ',t2-t1,'s'
-
+                'Total Iteration : ',it,', total time for SOR : ',t2-t1,'s'
+            WRITE(*,*) '-------------------------------------------------------'
+            WRITE(*,*) ''
+            
         END SUBROUTINE SOR
