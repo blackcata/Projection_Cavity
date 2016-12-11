@@ -1,4 +1,6 @@
-F90=gfortran
+F90=ifort
+FCFLAGS=-O2 
+
 TARGET= Projection_Cavity
 OBJECT= Projection_module.o Projection_main.o Projection_setup.o \
 		Projection_getuh.o Projection_getvh.o \
@@ -8,12 +10,13 @@ OBJECT= Projection_module.o Projection_main.o Projection_setup.o \
 
 all : $(TARGET)
 $(TARGET) : $(OBJECT)
-	$(F90) -o $@ $^
+	$(F90) $(FCFLAGS) -o $@ $^
 
 .SUFFIXES. : .o .f90
 
 %.o : %.f90
-	$(F90) -c $<
+	$(F90) $(FCFLAGS) -c $<
 
 clean :
 	rm -f *.o
+	rm RESULT/*.plt

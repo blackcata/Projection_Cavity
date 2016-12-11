@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------------------------!
 !
-!  PROGRAM: Projection_main.f90
+!  PROGRAM: Projection_module.f90
 !
 !  PURPOSE: Modules for Projection method
 !
