@@ -29,6 +29,7 @@
             CALL SYSTEM('rm -rf ./'//TRIM(path_name)//'/*')
 
             CALL MPI_INIT(ierr)
+
             CALL SETUP
             CALL OUTPUT(0)
 
@@ -39,7 +40,7 @@
             !     CALL RESI
             !     CALL GETUH
             !     CALL GETVH
-                CALL SOR
+                CALL SOR(ierr)
                 ! CALL UVNEW
                 it = 20
                 IF(mod(it,PRINT_NUM)==0) CALL OUTPUT(it)

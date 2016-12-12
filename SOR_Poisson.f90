@@ -14,7 +14,7 @@
 !
 !-----------------------------------------------------------------------------------!
 
-        SUBROUTINE SOR
+        SUBROUTINE SOR(ierr)
 
             USE projection_module,                                              &
               ONLY : Nx, Ny, dx, dy, dt, tol, omega, ITMAX, MYMPI
@@ -23,13 +23,18 @@
                 ONLY : Phi, DIVERGENCE
 
             IMPLICIT NONE
+            INCLUDE 'mpif.h'
 
+            INTEGER,INTENT(IN) :: ierr
             INTEGER :: i, j, it
             REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2
             REAL(KIND=8),DIMENSION(:,:),ALLOCATABLE :: b, phi_new
             TYPE(MYMPI) :: mpi_info
 
             ALLOCATE( b(1:Nx,1:Ny),phi_new(1:Nx,1:Ny) )
+
+            CALL MPI_COMM_SIZE(MPI_COMM_WORLD,mpi_info%nprocs,ierr)
+            CALL MPI_COMM_RANK(MPI_COMM_WORLD,mpi_info%myrank,ierr)
 
             b(1:Nx,1:Ny)       = 0.0
             phi_new(1:Nx,1:Ny) = 0.0
