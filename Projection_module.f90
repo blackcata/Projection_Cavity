@@ -20,7 +20,8 @@
 !-----------------------------------------------------------------------------------!
 
         MODULE projection_module
-
+            IMPLICIT NONE
+            
             INTEGER :: Nx, Ny, PRINT_NUM, TOTAL_IT, ITMAX
             REAL(KIND=8) :: Re, dt, dx, dy, ALx, ALy
             REAL(KIND=8) :: U0, tol, omega
@@ -29,6 +30,12 @@
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: U,V, Uhat, Vhat, UNew, VNew
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: P,VOR,Stream,Phi
             REAL(KIND=8), DIMENSION(:,:), ALLOCATABLE   :: Rx, Ry, Hx, Hy, Lx, Ly
+
+            TYPE :: MYMPI
+              INTEGER :: nprocs, myrank, nx_mpi, ny_mpi
+              INTEGER :: mpisize_x, mpisize_y, mpirank_x, mpirank_y
+              INTEGER,DIMENSION(4) :: rank_sur
+            END TYPE MYMPI
 
             SAVE
 

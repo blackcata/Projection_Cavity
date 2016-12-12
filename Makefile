@@ -1,12 +1,13 @@
 F90=ifort
-FCFLAGS=-O2
+FCFLAGS=-O2 -L$(MPI_HOME)/lib -I$(MPI_HOME)/include
+LDFLAGS= -lmpi
 
 TARGET= Projection_Cavity
 OBJECT= Projection_module.o Projection_main.o Projection_setup.o \
 		Projection_getuh.o Projection_getvh.o \
 		Projection_resi.o Projection_convec.o Projection_laplace.o  \
 		Projection_UVnew.o Projection_CFL.o Projection_output.o\
-		SOR_Poisson.o TDMA_Solver.o 
+		SOR_Poisson.o TDMA_Solver.o
 
 all : $(TARGET)
 $(TARGET) : $(OBJECT)

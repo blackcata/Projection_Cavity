@@ -17,16 +17,18 @@
         SUBROUTINE SOR
 
             USE projection_module,                                              &
-              ONLY : Nx, Ny, dx, dy, dt, tol, omega, ITMAX
+              ONLY : Nx, Ny, dx, dy, dt, tol, omega, ITMAX, MYMPI
 
             USE projection_module,                                              &
                 ONLY : Phi, DIVERGENCE
 
             IMPLICIT NONE
+            INCLUDE 'mpif.h'
 
             INTEGER :: i, j, it
             REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2
             REAL(KIND=8),DIMENSION(:,:),ALLOCATABLE :: b, phi_new
+            TYPE(MYMPI) :: mpi_info
 
             ALLOCATE( b(1:Nx,1:Ny),phi_new(1:Nx,1:Ny) )
 
@@ -78,8 +80,8 @@
               !                       Boundary Conditions                      !
               !----------------------------------------------------------------!
               DO j = 1,Ny
-                phi_new(1,j)  = 0.0
-                phi_new(Nx,j) = 0.0
+                phi_new(1,j)  = phi_new(2,j)!0.0
+                phi_new(Nx,j) = phi_new(Nx-1,j)!0.0
               END DO
 
               Do i = 1,Nx
@@ -117,5 +119,5 @@
                 'Total Iteration : ',it,', total time for SOR : ',t2-t1,'s'
             WRITE(*,*) '-------------------------------------------------------'
             WRITE(*,*) ''
-            
+
         END SUBROUTINE SOR
