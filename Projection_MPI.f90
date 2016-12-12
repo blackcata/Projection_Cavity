@@ -63,7 +63,7 @@
             INCLUDE 'mpif.h'
             TYPE(MYMPI),INTENT(IN) :: mpi_info
 
-            INTEGER :: req1, req2,                                               &
+            INTEGER :: req1, req2,                                              &
                        status1(MPI_STATUS_SIZE), status2(MPI_STATUS_SIZE)
             INTEGER,INTENT(IN) :: ierr, nx_mpi, ny_mpi
             REAL(KIND=8),INTENT(INOUT) :: Phi(0:nx_mpi+1,0:ny_mpi+1)

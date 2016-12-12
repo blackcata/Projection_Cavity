@@ -28,14 +28,12 @@
 
             INTEGER,INTENT(IN) :: ierr
             INTEGER :: i, j, it, ista,iend,jsta,jend
-            REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2
-            REAL(KIND=8),DIMENSION(:,:),ALLOCATABLE :: b, phi_new
+            REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2, SUM1_loc, SUM2_loc
+            REAL(KIND=8),DIMENSION(:,:),ALLOCATABLE :: b, phi_new, phi_loc
             TYPE(MYMPI) :: mpi_info
 
-            ALLOCATE( b(1:Nx,1:Ny),phi_new(1:Nx,1:Ny) )
-
-            b(1:Nx,1:Ny)       = 0.0
-            phi_new(1:Nx,1:Ny) = 0.0
+            SUM1 = 0.0
+            SUM2 = 0.0
             beta = dx/dy
 
             !------------------------------------------------------------------!
@@ -45,10 +43,10 @@
             CALL MPI_COMM_RANK(MPI_COMM_WORLD,mpi_info%myrank,ierr)
             CALL MPI_SETUP(mpi_xsize,mpi_ysize,mpi_info)
 
-            ista = mpi_info.mpirank_x*mpi_info.nx_mpi;
-            iend = ista + mpi_info.nx_mpi -1;
-            jsta = mpi_info.mpirank_y*mpi_info.ny_mpi;
-            jend = jsta + mpi_info.ny_mpi -1;
+            ista = mpi_info.mpirank_x*mpi_info.nx_mpi+1;
+            iend = ista + mpi_info.nx_mpi-1;
+            jsta = mpi_info.mpirank_y*mpi_info.ny_mpi+1;
+            jend = jsta + mpi_info.ny_mpi-1;
 
             WRITE(*,"(A,I2)")"Myrank : ",mpi_info%myrank
             WRITE(*,"(2(A,I2))")"mpiank_x : ",mpi_info%mpirank_x, ", mpirank_y : ",mpi_info%mpirank_y
@@ -64,41 +62,50 @@
               WRITE(*,*) '                  SOR PROCESS STARTED                  '
             END IF
 
+            !------------------------------------------------------------------!
+            !                        Memory Allocation                         !
+            !------------------------------------------------------------------!
+            ALLOCATE( phi_loc(0:mpi_info%nx_mpi+1,0:mpi_info%ny_mpi+1) )
+            ALLOCATE( phi_new(0:mpi_info%nx_mpi+1,0:mpi_info%ny_mpi+1) )
+            ALLOCATE( b(1:mpi_info%nx_mpi,1:mpi_info%ny_mpi) )
 
-            CALL DIVERGENCE(b)
+            b(1:mpi_info%nx_mpi,1:mpi_info%ny_mpi)           = 0.0
+            phi_loc(0:mpi_info%nx_mpi+1,0:mpi_info%ny_mpi+1) = 0.0
+            phi_new(0:mpi_info%nx_mpi+1,0:mpi_info%ny_mpi+1) = 0.0
+
+            DO j = jsta,jend
+              DO i = ista,iend
+                phi_loc(i-ista+1,j-jsta+1) = Phi(i,j)
+              END DO
+            END DO
+
+            ! Divergence term has to be modified to be parallelized
+            ! CALL DIVERGENCE(b)
             CALL CPU_TIME(t1)
 
             !------------------------------------------------------------------!
             !                      Main Loop of SOR method                     !
             !------------------------------------------------------------------!
             DO it=1,ITMAX
-              SUM1 = 0.0
-              SUM2 = 0.0
+              SUM1_loc = 0.0
+              SUM2_loc = 0.0
 
               !----------------------------------------------------------------!
               !                           Update red nodes                     !
               !----------------------------------------------------------------!
-              DO j=2,Ny-1
-                DO i=2,Nx-1
-                    IF((mod(i+j,2))==0) THEN
-                      phi_new(i,j) = ( phi(i+1,j)+phi(i-1,j)                    &
-                                      + beta**2*(phi(i,j+1)+phi(i,j-1))         &
-                                      - dx*dx*b(i,j)/dt ) / (2*(1+beta**2))
-                      phi_new(i,j) = phi(i,j) + omega*(phi_new(i,j) - phi(i,j))
-                    END IF
-                END DO
-              END DO
+              CALL SEND_NORTH(ierr,phi_loc,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
+              CALL SEND_SOUTH(ierr,phi_loc,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
+              CALL SEND_WEST(ierr, phi_loc,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
+              CALL SEND_EAST(ierr, phi_loc,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
 
-              !----------------------------------------------------------------!
-              !                         Update black nodes                     !
-              !----------------------------------------------------------------!
-              DO j=2,Ny-1
-                DO i=2,Nx-1
-                    IF((mod(i+j,2))==1) THEN
-                      phi_new(i,j) = ( phi_new(i+1,j)+phi_new(i-1,j)            &
-                                      + beta**2*(phi_new(i,j+1)+phi_new(i,j-1)) &
+              DO j=1,mpi_info%ny_mpi
+                DO i=1,mpi_info%nx_mpi
+                    IF((mod(i+j,2))==0) THEN
+                      phi_new(i,j) = ( phi_loc(i+1,j)+phi_loc(i-1,j)            &
+                                      + beta**2*(phi_loc(i,j+1)+phi_loc(i,j-1)) &
                                       - dx*dx*b(i,j)/dt ) / (2*(1+beta**2))
-                      phi_new(i,j) = phi(i,j) + omega*(phi_new(i,j) - phi(i,j))
+                      phi_new(i,j) = phi_loc(i,j)                               &
+                                   + omega*(phi_new(i,j) - phi_loc(i,j))
                     END IF
                 END DO
               END DO
@@ -106,39 +113,66 @@
               !----------------------------------------------------------------!
               !                       Boundary Conditions                      !
               !----------------------------------------------------------------!
-              DO j = 1,Ny
-                phi_new(1,j)  = phi_new(2,j)!0.0
-                phi_new(Nx,j) = phi_new(Nx-1,j)!0.0
+              IF (ista == 1)    phi_new(1,1:mpi_info%ny_mpi)             = 0.0
+              IF (iend == Nx) phi_new(mpi_info%nx_mpi,1:mpi_info%ny_mpi) = 0.0
+              IF (jsta == 1)    phi_new(1:mpi_info%nx_mpi,1)             = 1.0
+              IF (jend == Ny) phi_new(1:mpi_info%nx_mpi,mpi_info%ny_mpi) = 0.0
+
+              !----------------------------------------------------------------!
+              !                         Update black nodes                     !
+              !----------------------------------------------------------------!
+              CALL SEND_NORTH(ierr,phi_new,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
+              CALL SEND_SOUTH(ierr,phi_new,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
+              CALL SEND_WEST(ierr, phi_new,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
+              CALL SEND_EAST(ierr, phi_new,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
+
+              DO j=1,mpi_info%ny_mpi
+                DO i=1,mpi_info%nx_mpi
+                    IF((mod(i+j,2))==1) THEN
+                      phi_new(i,j) = ( phi_new(i+1,j)+phi_new(i-1,j)            &
+                                      + beta**2*(phi_new(i,j+1)+phi_new(i,j-1)) &
+                                      - dx*dx*b(i,j)/dt ) / (2*(1+beta**2))
+                      phi_new(i,j) = phi_loc(i,j)                               &
+                                   + omega*(phi_new(i,j) - phi_loc(i,j))
+                    END IF
+                END DO
               END DO
 
-              Do i = 1,Nx
-                phi_new(i,1)  = 1.0
-                phi_new(i,Ny) = 0.0
-              END DO
+              !----------------------------------------------------------------!
+              !                       Boundary Conditions                      !
+              !----------------------------------------------------------------!
+              IF (ista == 1)    phi_new(1,1:mpi_info%ny_mpi)             = 0.0
+              IF (iend == Nx) phi_new(mpi_info%nx_mpi,1:mpi_info%ny_mpi) = 0.0
+              IF (jsta == 1)    phi_new(1:mpi_info%nx_mpi,1)             = 1.0
+              IF (jend == Ny) phi_new(1:mpi_info%nx_mpi,mpi_info%ny_mpi) = 0.0
 
               !----------------------------------------------------------------!
               !                       Convergence Criteria                     !
               !----------------------------------------------------------------!
-              DO j = 2,Ny-1
-                DO i = 2,Nx-1
-                  SUM1 = SUM1 + abs(phi_new(i,j))
-                  SUM2 = SUM2 + abs( phi_new(i+1,j)+phi_new(i-1,j)              &
+              DO j = 2,mpi_info%ny_mpi-1
+                DO i = 2,mpi_info%nx_mpi-1
+                  SUM1_loc = SUM1_loc + abs(phi_new(i,j))
+                  SUM2_loc = SUM2_loc + abs( phi_new(i+1,j)+phi_new(i-1,j)      &
                                   + beta**2*(phi_new(i,j+1)+phi_new(i,j-1))     &
                                   -(2+2*beta**2)*phi_new(i,j)- dx*dx*b(i,j)/dt )
                 END DO
               END DO
-
-              ! WRITE(*,"(I5,2X,3(F15.7,2X))") it, SUM2/SUM1, tol
+              CALL MPI_ALLREDUCE(SUM1_loc,SUM1,1,MPI_DOUBLE_PRECISION,          &
+                                                 MPI_SUM,MPI_COMM_WORLD,ierr)
+              CALL MPI_ALLREDUCE(SUM2_loc,SUM2,1,MPI_DOUBLE_PRECISION,          &
+                                                 MPI_SUM,MPI_COMM_WORLD,ierr)
+              IF (mpi_info%myrank==0) WRITE(*,"(I5,2X,3(F15.10,2X))") it, SUM2/SUM1, tol
               IF ( SUM2/SUM1 < tol ) EXIT
 
               !----------------------------------------------------------------!
               !                               Update                           !
               !----------------------------------------------------------------!
-              phi(1:Nx,1:Ny) = phi_new(1:Nx,1:Ny)
+              phi_loc(1:mpi_info%nx_mpi,1:mpi_info%nx_mpi) =                    &
+                                    phi_new(1:mpi_info%nx_mpi,1:mpi_info%nx_mpi)
 
             END DO
 
-            DEALLOCATE(b,phi_new)
+            DEALLOCATE(b,phi_loc,phi_new)
             CALL CPU_TIME(t2)
 
             IF ( mpi_info%myrank == 0 ) THEN
