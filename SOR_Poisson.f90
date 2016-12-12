@@ -34,23 +34,36 @@
 
             ALLOCATE( b(1:Nx,1:Ny),phi_new(1:Nx,1:Ny) )
 
-            CALL MPI_COMM_SIZE(MPI_COMM_WORLD,mpi_info%nprocs,ierr)
-            CALL MPI_COMM_RANK(MPI_COMM_WORLD,mpi_info%myrank,ierr)
-            CALL MPI_SETUP(mpi_xsize,mpi_ysize,mpi_info)
-
             b(1:Nx,1:Ny)       = 0.0
             phi_new(1:Nx,1:Ny) = 0.0
             beta = dx/dy
+
+            !------------------------------------------------------------------!
+            !                            MPI Setting                           !
+            !------------------------------------------------------------------!
+            CALL MPI_COMM_SIZE(MPI_COMM_WORLD,mpi_info%nprocs,ierr)
+            CALL MPI_COMM_RANK(MPI_COMM_WORLD,mpi_info%myrank,ierr)
+            CALL MPI_SETUP(mpi_xsize,mpi_ysize,mpi_info)
 
             ista = mpi_info.mpirank_x*mpi_info.nx_mpi;
             iend = ista + mpi_info.nx_mpi -1;
             jsta = mpi_info.mpirank_y*mpi_info.ny_mpi;
             jend = jsta + mpi_info.ny_mpi -1;
 
+            WRITE(*,"(A,I2)")"Myrank : ",mpi_info%myrank
+            WRITE(*,"(2(A,I2))")"mpiank_x : ",mpi_info%mpirank_x, ", mpirank_y : ",mpi_info%mpirank_y
+            WRITE(*,"(2(A,I2))")"mpisize_x : ",mpi_info%mpisize_x,", mpisize_y : ",mpi_info%mpisize_y
+            WRITE(*,"(4(A,I2))")"e_rank : ",mpi_info%rank_sur(0),", w_rank : ",mpi_info%rank_sur(1),&
+                   " ,s_rank : ",mpi_info%rank_sur(2),", n_rank : ",mpi_info%rank_sur(3)
+            WRITE(*,"(A,4(I3,A))")"(",ista,",",iend,") X (",jsta,",",jend,")"
+            WRITE(*,*)""
+            CALL MPI_BARRIER(MPI_COMM_WORLD,ierr)
+
             IF( mpi_info%myrank == 0 )THEN
               WRITE(*,*) '-------------------------------------------------------'
               WRITE(*,*) '                  SOR PROCESS STARTED                  '
             END IF
+
 
             CALL DIVERGENCE(b)
             CALL CPU_TIME(t1)

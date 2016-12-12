@@ -33,6 +33,7 @@
 
             CALL SETUP
             IF( myrank==0 ) CALL OUTPUT(0)
+            CALL MPI_BARRIER(MPI_COMM_WORLD,ierr)
 
             !---------- Main Loop ---------!
 
