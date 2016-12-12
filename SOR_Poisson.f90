@@ -21,7 +21,7 @@
                      mpi_xsize, mpi_ysize
 
             USE projection_module,                                              &
-                ONLY : Phi, DIVERGENCE, MPI_SETUP
+                ONLY : Phi, DIVERGENCE
 
             IMPLICIT NONE
             INCLUDE 'mpif.h'
