@@ -27,7 +27,7 @@
             INCLUDE 'mpif.h'
 
             INTEGER,INTENT(IN) :: ierr
-            INTEGER :: i, j, it
+            INTEGER :: i, j, it, ista,iend,jsta,jend
             REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2
             REAL(KIND=8),DIMENSION(:,:),ALLOCATABLE :: b, phi_new
             TYPE(MYMPI) :: mpi_info
@@ -42,8 +42,16 @@
             phi_new(1:Nx,1:Ny) = 0.0
             beta = dx/dy
 
-            WRITE(*,*) '-------------------------------------------------------'
-            WRITE(*,*) '                  SOR PROCESS STARTED                  '
+            ista = mpi_info.mpirank_x*mpi_info.nx_mpi;
+            iend = ista + mpi_info.nx_mpi -1;
+            jsta = mpi_info.mpirank_y*mpi_info.ny_mpi;
+            jend = jsta + mpi_info.ny_mpi -1;
+
+            IF( mpi_info%myrank == 0 )THEN
+              WRITE(*,*) '-------------------------------------------------------'
+              WRITE(*,*) '                  SOR PROCESS STARTED                  '
+            END IF
+
             CALL DIVERGENCE(b)
             CALL CPU_TIME(t1)
 
@@ -120,10 +128,12 @@
             DEALLOCATE(b,phi_new)
             CALL CPU_TIME(t2)
 
-            WRITE(*,*) '                   SOR PROCESS ENDED                   '
-            WRITE(*,FMT='(A,I5,A,F10.7,A)')                                     &
-                'Total Iteration : ',it,', total time for SOR : ',t2-t1,'s'
-            WRITE(*,*) '-------------------------------------------------------'
-            WRITE(*,*) ''
+            IF ( mpi_info%myrank == 0 ) THEN
+              WRITE(*,*) '                   SOR PROCESS ENDED                   '
+              WRITE(*,FMT='(A,I5,A,F10.7,A)')                                     &
+                  'Total Iteration : ',it,', total time for SOR : ',t2-t1,'s'
+              WRITE(*,*) '-------------------------------------------------------'
+              WRITE(*,*) ''
+            END IF
 
         END SUBROUTINE SOR

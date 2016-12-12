@@ -22,17 +22,15 @@
 
             INTEGER :: it, ierr, myrank
 
-
-
-            path_name = 'RESULT'
-            CALL SYSTEM('mkdir '//TRIM(path_name))
-
-            ! Remove command
-            CALL SYSTEM('rm -rf ./'//TRIM(path_name)//'/*')
-
             CALL MPI_INIT(ierr)
             CALL MPI_COMM_RANK(MPI_COMM_WORLD,myrank,ierr)
-            
+
+            IF (myrank == 0) THEN
+              path_name = 'RESULT'
+              CALL SYSTEM('mkdir '//TRIM(path_name))
+              CALL SYSTEM('rm -rf ./'//TRIM(path_name)//'/*')
+            END IF
+
             CALL SETUP
             IF( myrank==0 ) CALL OUTPUT(0)
 
