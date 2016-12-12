@@ -19,13 +19,16 @@
 
             USE projection_module,                                              &
                 ONLY : Nx, Ny, dx, dy, ALx, ALy, omega, tol, Re, U0, dt,        &
-                       PRINT_NUM, TOTAL_IT, ITMAX
+                       PRINT_NUM, TOTAL_IT, ITMAX, mpi_xsize, mpi_ysize
 
             USE projection_module,                                              &
                 ONLY : U, V, Uhat, Vhat, Unew, Vnew, P, Phi,                    &
                        Hx, Hy, Rx, Ry, Lx, Ly
 
             IMPLICIT NONE
+
+            mpi_xsize = 2
+            mpi_ysize = 2
 
             PRINT_NUM = 20
             TOTAL_IT  = 100

@@ -17,10 +17,11 @@
         SUBROUTINE SOR(ierr)
 
             USE projection_module,                                              &
-              ONLY : Nx, Ny, dx, dy, dt, tol, omega, ITMAX, MYMPI
+              ONLY : Nx, Ny, dx, dy, dt, tol, omega, ITMAX, MYMPI,              &
+                     mpi_xsize, mpi_ysize
 
             USE projection_module,                                              &
-                ONLY : Phi, DIVERGENCE
+                ONLY : Phi, DIVERGENCE, MPI_SETUP
 
             IMPLICIT NONE
             INCLUDE 'mpif.h'
@@ -35,6 +36,7 @@
 
             CALL MPI_COMM_SIZE(MPI_COMM_WORLD,mpi_info%nprocs,ierr)
             CALL MPI_COMM_RANK(MPI_COMM_WORLD,mpi_info%myrank,ierr)
+            CALL MPI_SETUP(mpi_xsize,mpi_ysize,mpi_info)
 
             b(1:Nx,1:Ny)       = 0.0
             phi_new(1:Nx,1:Ny) = 0.0
