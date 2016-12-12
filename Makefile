@@ -1,6 +1,6 @@
 F90=ifort
 FCFLAGS=-O2 -L$(MPI_HOME)/lib -I$(MPI_HOME)/include
-LDFLAGS= -lmpi
+LDFLAGS= -lmpifort
 
 TARGET= Projection_Cavity
 OBJECT= Projection_module.o Projection_main.o Projection_setup.o \
@@ -11,12 +11,12 @@ OBJECT= Projection_module.o Projection_main.o Projection_setup.o \
 
 all : $(TARGET)
 $(TARGET) : $(OBJECT)
-	$(F90) $(FCFLAGS) -o $@ $^
+	$(F90) $(FCFLAGS) -o $@ $^ $(LDFLAGS)
 
 .SUFFIXES. : .o .f90
 
 %.o : %.f90
-	$(F90) $(FCFLAGS) -c $<
+	$(F90) $(FCFLAGS) -c $< $(LDFLAGS)
 
 clean :
 	rm -f *.o

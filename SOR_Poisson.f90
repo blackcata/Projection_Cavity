@@ -23,7 +23,6 @@
                 ONLY : Phi, DIVERGENCE
 
             IMPLICIT NONE
-            INCLUDE 'mpif.h'
 
             INTEGER :: i, j, it
             REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2
