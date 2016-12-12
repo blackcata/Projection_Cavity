@@ -20,7 +20,9 @@
             IMPLICIT NONE
             INCLUDE 'mpif.h'
 
-            INTEGER :: it, ierr
+            INTEGER :: it, ierr, myrank
+
+
 
             path_name = 'RESULT'
             CALL SYSTEM('mkdir '//TRIM(path_name))
@@ -29,9 +31,10 @@
             CALL SYSTEM('rm -rf ./'//TRIM(path_name)//'/*')
 
             CALL MPI_INIT(ierr)
-
+            CALL MPI_COMM_RANK(MPI_COMM_WORLD,myrank,ierr)
+            
             CALL SETUP
-            CALL OUTPUT(0)
+            IF( myrank==0 ) CALL OUTPUT(0)
 
             !---------- Main Loop ---------!
 
@@ -43,7 +46,7 @@
                 CALL SOR(ierr)
                 ! CALL UVNEW
                 it = 20
-                IF(mod(it,PRINT_NUM)==0) CALL OUTPUT(it)
+                IF(mod(it,PRINT_NUM)==0 .AND. myrank==0) CALL OUTPUT(it)
             ! END DO
 
             CALL MPI_FINALIZE(ierr)
