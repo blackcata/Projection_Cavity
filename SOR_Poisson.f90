@@ -27,9 +27,11 @@
             INCLUDE 'mpif.h'
 
             INTEGER,INTENT(IN) :: ierr
-            INTEGER :: i, j, it, ista,iend,jsta,jend
+            INTEGER :: i, j, it, ista,iend,jsta,jend, i_tmp, j_tmp,tmp
             REAL(KIND=8) :: beta, rms, t1, t2, SUM1, SUM2, SUM1_loc, SUM2_loc
+            REAL(KIND=8),DIMENSION(:),ALLOCATABLE   :: phi_tmp, phi_glob
             REAL(KIND=8),DIMENSION(:,:),ALLOCATABLE :: b, phi_new, phi_loc
+
             TYPE(MYMPI) :: mpi_info
 
             SUM1 = 0.0
@@ -67,6 +69,8 @@
             !------------------------------------------------------------------!
             ALLOCATE( phi_loc(0:mpi_info%nx_mpi+1,0:mpi_info%ny_mpi+1) )
             ALLOCATE( phi_new(0:mpi_info%nx_mpi+1,0:mpi_info%ny_mpi+1) )
+            ALLOCATE( phi_tmp(1:mpi_info%nx_mpi*mpi_info%ny_mpi) )
+            ALLOCATE( phi_glob(1:Nx*Ny) )
             ALLOCATE( b(1:mpi_info%nx_mpi,1:mpi_info%ny_mpi) )
 
             b(1:mpi_info%nx_mpi,1:mpi_info%ny_mpi)           = 0.0
@@ -161,8 +165,40 @@
                                                  MPI_SUM,MPI_COMM_WORLD,ierr)
               CALL MPI_ALLREDUCE(SUM2_loc,SUM2,1,MPI_DOUBLE_PRECISION,          &
                                                  MPI_SUM,MPI_COMM_WORLD,ierr)
-              IF (mpi_info%myrank==0) WRITE(*,"(I5,2X,3(F15.10,2X))") it, SUM2/SUM1, tol
-              IF ( SUM2/SUM1 < tol ) EXIT
+
+              ! IF (mpi_info%myrank==0) WRITE(*,"(I5,2X,3(F15.10,2X))") it, SUM2/SUM1, tol
+              IF ( SUM2/SUM1 < tol ) THEN
+
+                DO j = 1,mpi_info%ny_mpi
+                  DO i = 1,mpi_info%nx_mpi
+                    phi_tmp(i+(j-1)*(mpi_info%nx_mpi)) = phi_new(i,j)
+                    phi_new(i,j) = phi_tmp(i+(j-1)*(mpi_info%nx_mpi))
+                  END DO
+                END DO
+
+                CALL MPI_ALLGATHER(phi_tmp,mpi_info%nx_mpi*mpi_info%ny_mpi,     &
+                MPI_DOUBLE_PRECISION,phi_glob,mpi_info%nx_mpi*mpi_info%ny_mpi,  &
+                MPI_DOUBLE_PRECISION,MPI_COMM_WORLD,ierr)
+
+                tmp = 0
+                Do i_tmp = 0,1
+                  DO j_tmp = 0,1
+                    ista = i_tmp*mpi_info.nx_mpi+1;
+                    iend = ista + mpi_info.nx_mpi-1;
+                    jsta = j_tmp*mpi_info.ny_mpi+1;
+                    jend = jsta + mpi_info.ny_mpi-1;
+
+                    DO j = jsta,jend
+                      DO i = ista,iend
+                        tmp = tmp +1
+                        Phi(i,j) = phi_glob(tmp)
+                      END DO
+                    END DO
+
+                  END DO
+                END DO
+                EXIT
+              END IF
 
               !----------------------------------------------------------------!
               !                               Update                           !
@@ -172,12 +208,12 @@
 
             END DO
 
-            DEALLOCATE(b,phi_loc,phi_new)
+            DEALLOCATE(b,phi_loc,phi_new,phi_tmp,phi_glob)
             CALL CPU_TIME(t2)
 
             IF ( mpi_info%myrank == 0 ) THEN
               WRITE(*,*) '                   SOR PROCESS ENDED                   '
-              WRITE(*,FMT='(A,I5,A,F10.7,A)')                                     &
+              WRITE(*,FMT='(A,I6,A,F10.7,A)')                                   &
                   'Total Iteration : ',it,', total time for SOR : ',t2-t1,'s'
               WRITE(*,*) '-------------------------------------------------------'
               WRITE(*,*) ''
