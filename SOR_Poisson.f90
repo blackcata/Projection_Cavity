@@ -83,8 +83,7 @@
               END DO
             END DO
 
-            ! Divergence term has to be modified to be parallelized
-            ! CALL DIVERGENCE(b)
+            CALL DIVERGENCE(b,mpi_info%nx_mpi,mpi_info%ny_mpi,mpi_info)
             CALL CPU_TIME(t1)
 
             !------------------------------------------------------------------!
@@ -169,6 +168,9 @@
               ! IF (mpi_info%myrank==0) WRITE(*,"(I5,2X,3(F15.10,2X))") it, SUM2/SUM1, tol
               IF ( SUM2/SUM1 < tol ) THEN
 
+                !---------------------------------------------------------------!
+                !                   Gathering phi_loc to phi                    !
+                !---------------------------------------------------------------!
                 DO j = 1,mpi_info%ny_mpi
                   DO i = 1,mpi_info%nx_mpi
                     phi_tmp(i+(j-1)*(mpi_info%nx_mpi)) = phi_new(i,j)

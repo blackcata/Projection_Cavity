@@ -41,14 +41,20 @@
 
         CONTAINS
 
-            SUBROUTINE DIVERGENCE(b)
+            SUBROUTINE DIVERGENCE(b,nx_mpi,ny_mpi,mpi_info)
 
                 IMPLICIT NONE
-                INTEGER :: i,j
-                REAL(KIND=8) :: b(1:Nx,1:Ny), duhat, dvhat
+                INTEGER :: i,j ,nx_mpi, ny_mpi, ista, iend, jsta, jend
+                REAL(KIND=8) :: b(1:nx_mpi,1:ny_mpi), duhat, dvhat
+                TYPE(MYMPI),INTENT(IN) :: mpi_info
 
-                DO j = 1,Ny
-                    DO i = 1,Nx
+                ista = mpi_info.mpirank_x*mpi_info.nx_mpi+1;
+                iend = ista + mpi_info.nx_mpi-1;
+                jsta = mpi_info.mpirank_y*mpi_info.ny_mpi+1;
+                jend = jsta + mpi_info.ny_mpi-1;
+
+                DO j = jsta,jend
+                    DO i = ista,iend
                         IF (i==1) THEN
                             duhat = Uhat(i,j)
                         ELSEIF (i==Nx) THEN
